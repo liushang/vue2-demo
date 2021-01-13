@@ -5,6 +5,9 @@ import App from './App'
 import router from './router'
 import * as antd from '@antv/g2';
 import OGVSchema from './schema/index';
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+Vue.use(ElementUI);
 Vue.use(OGVSchema);
 
 Vue.config.productionTip = false

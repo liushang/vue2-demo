@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
-import HelloWorld1 from '../modules/moduleone/test.vue'
-import HelloWorld2 from '../modules/moduletwo/test.vue'
+import newDesign from '../views/OGV-form-design/index.vue'
+import oButton from '../views/OGV-form-design/components/o-button.vue'
+import oButtonRender from '../views/OGV-form-design/components/o-buttonRender.js'
+
 
 
 
@@ -13,7 +15,15 @@ export default new Router({
     {
       path: '/',
       name: 'HelloWorld',
-      component: HelloWorld2
+      component: newDesign
+    }, {
+      path: '/o-button',
+      name: 'HelloWorld',
+      component: oButton
+    }, {
+      path: '/o-buttonRender',
+      name: 'HelloWorld',
+      component: oButtonRender
     }
   ]
 })

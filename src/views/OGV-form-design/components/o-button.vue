@@ -1,12 +1,11 @@
 <template>
 <div>
-    <!-- <ogvdesign :configComponents="configComponents" :configData="configData" v-if="showDesign"></ogvdesign> -->
-    <ogvdesign :configComponents="configComponents1" :configData="configData" v-if="showDesign"></ogvdesign>
+<ogvdesign :configComponents="configComponents1" :configData="configData" v-if="showDesign"></ogvdesign>
 </div>
 </template>
 
 <script>
-import indexIns from './index';
+import indexIns from './o-button';
 export default {
     data() {
         return {
@@ -25,6 +24,9 @@ export default {
             vForArr: [1, 2],
             value: 1234546577
         };
+    },
+    render(h) {
+        return 
     },
     methods: {
         updateMsg() {

@@ -20,7 +20,8 @@ class ConfInstance extends OgvConfig {
                 }, {
                     name: 'el-button',
                     attrs: {
-                        size: 'small'
+                        size: 'small',
+                        type: 'primary'
                     },
                     children: [ '确定' ]
                 }]
