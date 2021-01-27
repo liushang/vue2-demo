@@ -4,6 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 import newDesign from '../views/OGV-form-design/index.vue'
 import oButton from '../views/OGV-form-design/components/o-button.vue'
 import oButtonRender from '../views/OGV-form-design/components/o-buttonRender.js'
+import oInputRender from '../views/OGV-form-design/components/o-inputRender.js'
 
 
 
@@ -15,7 +16,7 @@ export default new Router({
     {
       path: '/',
       name: 'HelloWorld',
-      component: newDesign
+      component: oInputRender
     }, {
       path: '/o-button',
       name: 'HelloWorld',

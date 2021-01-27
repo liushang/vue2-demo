@@ -1,3 +1,4 @@
+import Vue from 'vue';
 export function toSeparator(string, separator = '-') {
     let temp = string.replace(/[A-Z]/g, match => separator + match.toLowerCase());
     if (temp.slice(0, 1) === separator) temp = temp.slice(1);
@@ -54,9 +55,7 @@ export function analysisRenderConfig(configData, createElement) {
     if (configData) {
         let renderArr = [];
         for (let i of configData) {
-            console.log(JSON.stringify(i));
             if (i.raw.vFor && i.raw.vFor.length > 0) {
-                console.log('vfor存在');
                 for (let o = 0; o < i.raw.vFor.length; o++) {
                     let e = JSON.parse(JSON.stringify(i));
                     e.raw.props.value = i.raw.vFor[o].value || i.raw.vFor[o];
@@ -67,9 +66,7 @@ export function analysisRenderConfig(configData, createElement) {
                 renderArr.push(dealChild(i, createElement));
             }
         }
-        // console.log(templateString);
-        console.log('renderArr');
-        console.log(renderArr);
+        // console.log(JSON.parse(JSON.stringify(renderArr)))
         return renderArr;
     }
 }
@@ -81,10 +78,10 @@ function dealChild(child, cb) {
         return child.value;
     } else {
         // jsx 语法渲染
-        if (child.raw.name === 'oSelect') {
-            console.log('oSelect');
-            console.log(child);
-        }
+        // if (child.raw.name === 'oSelect') {
+        //     console.log('oSelect');
+        //     console.log(child);
+        // }
         let item = {
             'class': child.raw['class'],
             style: child.raw.style,
@@ -100,6 +97,7 @@ function dealChild(child, cb) {
             ref: child.raw.ref,
             refInFor: child.raw.refInFor
         };
+        console.log(item)
         if (child.raw.attr) {
             let attrs = {};
             let props = {};
@@ -112,8 +110,6 @@ function dealChild(child, cb) {
             }
             item.attrs = Object.assign(item.attrs || {}, attrs);
             item.props = Object.assign(item.props || {}, props);
-            console.log('props123123123123123123123123');
-            console.log(props);
         }
         return cb(
             child.raw.name,
@@ -175,6 +171,37 @@ export function analysisData(configComponents, index) {
                 childrenData.value = [];
             }
             this.$set(this.controlData, id, childrenData);
+            configData.push(childrenData);
+        }
+    }
+    return configData;
+}
+
+export function analysisDataRender(configComponents, index) {
+    // 构建组件数据
+    const configData = [];
+    for (let i = 0; i < configComponents.length; i++) {
+        const rawData = deepClone1(configComponents[i]);
+        delete rawData.children;
+        let id = index === undefined ? 0 : index + '-' + i;
+        if (typeof configComponents[i] !== 'object') { // 简单类型
+            const childrenData = {
+                type: 'simple',
+                id,
+                value: configComponents[i],
+                raw: rawData
+            };
+            // Vue.set(this.controlData, id, childrenData);
+            configData.push(childrenData);
+        } else {
+            const childrenData = {
+                type: 'Array',
+                id,
+                vIf: i.vIf,
+                raw: rawData
+            };
+            if (configComponents[i].children) childrenData.value = analysisDataRender(configComponents[i].children, id);
+            // Vue.set(this.controlData, id, childrenData);
             configData.push(childrenData);
         }
     }

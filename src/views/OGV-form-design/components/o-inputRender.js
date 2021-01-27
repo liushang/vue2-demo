@@ -1,46 +1,37 @@
 // import { analysisRenderConfig, analysisDataRender } from '../../../schema/util';
-import { created, render } from '../../../schema/api';
-// let data = {
-//     configComponents: {
-//         children: [{
-//             name: 'el-button',
-//             attr: {
-//                 size: 'small',
-//                 type: 'primary',
-//             },
-//             ref: 'oButton',
-//             on: {
-//                 click: this.updateMsg
-//             },
-//             children: [ '确定', {
-//                 name: 'span',
-//             } ]
-//         }]
-//     },
-//     configData: [],
-// };
+import { created, render, computed } from '../../../schema/api';
 let base = {
     data() {
         return {
             configComponents: {
                 children: [{
-                    name: 'el-button',
+                    name: 'el-input',
                     attr: {
                         size: 'small',
                         type: 'primary',
                     },
-                    ref: 'oButton',
+                    ref: 'oInput',
                     on: {
-                        click: this.updateMsg
+                        blur: this.updateMsg,
+                        input: this.input
                     },
+                    props: {
+                      value: 12312312312312
+                    },
+                    // domProps: {
+                    //   value: 12
+                    // },
                     children: [ '确定', {
                         name: 'span',
                     } ]
                 }]
             },
-            configData: [],
+            value: '313',
+            llvalue: '313',
         }
     },
+    // value: 213,
+    // props: ['value'],
     render,
     methods: {
         updateMsg() {
@@ -51,10 +42,20 @@ let base = {
             console.log('我是change');
             console.log(this.configData);
         },
+        input(event) {
+          console.log(event)
+          this.$emit('input', event)
+          this.configComponents.children[0].props.value = event
+          console.log(this)
+        }
     },
-    created,
+    computed,
     mounted() {
         console.log(this.$refs.myRef)
+        setTimeout(() => {
+          this.configComponents.children[0].props.value = 2
+          // console.log(this.$refs.oInput.props.value = 234)
+        }, 2000)
     }
 };
 let oButton = config => {
