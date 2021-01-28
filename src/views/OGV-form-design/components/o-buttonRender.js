@@ -1,5 +1,5 @@
 // import { analysisRenderConfig, analysisDataRender } from '../../../schema/util';
-import { created, render } from '../../../schema/api';
+import { render, computed } from '../../../schema/api';
 // let data = {
 //     configComponents: {
 //         children: [{
@@ -22,37 +22,42 @@ import { created, render } from '../../../schema/api';
 let base = {
     data() {
         return {
-            configComponents: {
-                children: [{
-                    name: 'el-button',
-                    attr: {
-                        size: 'small',
-                        type: 'primary',
-                    },
-                    ref: 'oButton',
-                    on: {
-                        click: this.updateMsg
-                    },
-                    children: [ '确定', {
-                        name: 'span',
-                    } ]
-                }]
-            },
-            configData: [],
+            // configData: [],
         }
+    },
+    computed: {
+        ...computed,
+        configComponents() {
+            return {
+              children: [{
+                  name: 'el-button',
+                  attr: {
+                      size: 'small',
+                      type: 'primary',
+                  },
+                  ref: 'oButton',
+                  jNode: 'oButton',
+                  on: {
+                      click: this.updateMsg
+                  },
+                  children: [ '确定', {
+                      name: 'span',
+                  } ]
+              }]
+            }
+        },
     },
     render,
     methods: {
         updateMsg() {
             console.log('updateMsg');
-            console.log(this.configData)
+            // console.log(this.configData)
         },
         change() {
             console.log('我是change');
-            console.log(this.configData);
+            // console.log(this.configData);
         },
     },
-    created,
     mounted() {
         console.log(this.$refs.myRef)
     }

@@ -3,29 +3,35 @@ import { render, computed } from '../../../schema/api';
 let base = {
     data() {
         return {
-            value: '313',
-            llvalue: '313',
+          renderArr: []
         }
     },
-    // value: 213,
-    props: ['form', 'key'],
+    props: {
+      config: {
+        type: Array,
+        default: () => [ {
+            name: 'oButton',
+            children: ['确定'],
+            span: 4,
+          }, {
+            name: 'oInput',
+            children: [],
+            span: 3,
+            offset: 7
+          }
+        ]
+      },
+    },
     render,
     methods: {
         updateMsg() {
             console.log('updateMsg');
-            console.log(this.configData)
         },
         change() {
             console.log('我是change');
-            console.log(this.configData);
         },
         input(event) {
-          console.log(event)
-          // this.$emit('input', event)
-          this.configComponents.children[0].props.value = event
-          // this.form[this.key] = event
           this.value = event
-          console.log(this)
         }
     },
     computed: {
@@ -33,11 +39,7 @@ let base = {
       configComponents() {
         return {
           children: [{
-              name: 'el-input',
-              attr: {
-                  size: 'small',
-                  type: 'primary',
-              },
+              name: 'el-form',
               ref: 'oInput',
               on: {
                   blur: this.updateMsg,
@@ -46,16 +48,28 @@ let base = {
               props: {
                 value: this.value
               },
-              // domProps: {
-              //   value: 12
-              // },
-              children: [ '确定', {
-                  name: 'span',
-              } ]
+              children: this.renderArr
           }]
         }
       },
     },
-    mounted() {}
+    mounted() {
+      let config = this.config.map(x => {
+        return {
+          name: 'el-col',
+          attr: {
+            span: x.span,
+            offset: x.offset
+          },
+          children: [
+            x
+          ]
+        }
+      })
+      this.renderArr = [{
+        name: 'el-row',
+        children: config
+      }]
+    }
 };
 export default base

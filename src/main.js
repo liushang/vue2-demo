@@ -6,9 +6,15 @@ import router from './router'
 import * as antd from '@antv/g2';
 import OGVSchema from './schema/index';
 import ElementUI from 'element-ui';
+import oButton from './views/OGV-form-design/components/o-buttonRender'
+import oInput from './views/OGV-form-design/components/o-inputRender'
+
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
 Vue.use(OGVSchema);
+Vue.component('oButton', oButton)
+Vue.component('oInput', oInput)
+
 
 Vue.config.productionTip = false
 console.log(antd.VERSION)
