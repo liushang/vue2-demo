@@ -3,23 +3,20 @@ import { render, computed } from '../../../schema/api';
 let base = {
     data() {
         return {
-          renderArr: []
+          form: {
+            'form-item-0': 1
+          },
+          aaa: 2342
         }
     },
     props: {
+      // form: {
+      //   type: Object,
+      //   default: () => {}
+      // },
       config: {
         type: Array,
-        default: () => [ {
-            name: 'oButton',
-            children: ['确定'],
-            span: 4,
-          }, {
-            name: 'oInput',
-            children: [],
-            span: 3,
-            offset: 7
-          }
-        ]
+        default: () => []
       },
     },
     render,
@@ -32,6 +29,11 @@ let base = {
         },
         input(event) {
           this.value = event
+        },
+        submit(e) {
+          console.log('submit');
+          console.log(this.aaa)
+          console.log(e)
         }
     },
     computed: {
@@ -52,24 +54,44 @@ let base = {
           }]
         }
       },
+      renderArr() {
+        let config = this.config.map((x, index) => {
+          let needProps = [ 'oInput' ]
+          let needOnclick = [ 'oButton' ]
+          if (needProps.includes(x.name)) {
+            x.props = Object.assign(x.props || {}, {
+              form: this.form,
+              keyword: 'form-item-' + index
+            })
+          }
+          // if (needOnclick.includes(x.name)) {
+          console.log('增加click事件')
+          if (x.on) x.props.on = Object.assign(x.on || {}, {
+            click: this.submit
+          })
+          if (x.children) x.props.children = x.children
+          if (x.name === 'oHtml') {
+            x.props.subName = x.subName
+          }
+          console.log(x)
+          // }
+          return {
+            name: 'el-col',
+            attr: {
+              span: x.span,
+              offset: x.offset
+            },
+            children: [
+              x
+            ]
+          }
+        })
+        return [{
+          name: 'el-row',
+          children: config
+        }]
+      }
     },
-    mounted() {
-      let config = this.config.map(x => {
-        return {
-          name: 'el-col',
-          attr: {
-            span: x.span,
-            offset: x.offset
-          },
-          children: [
-            x
-          ]
-        }
-      })
-      this.renderArr = [{
-        name: 'el-row',
-        children: config
-      }]
-    }
+    mounted() {}
 };
 export default base
