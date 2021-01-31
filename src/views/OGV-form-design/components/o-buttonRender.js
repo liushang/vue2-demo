@@ -9,6 +9,10 @@ let base = {
             type: Object,
             default: () => {}
         },
+        attrs: {
+            type: Object,
+            default: () => {}
+        },
         children: {
             type: Array,
             default: () => ['确定']
