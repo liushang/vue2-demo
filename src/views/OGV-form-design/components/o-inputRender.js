@@ -3,11 +3,27 @@ import { render, computed } from '../../../schema/api';
 let base = {
     data() {
         return {
-            value: '313',
+            val: '313',
         }
     },
-    // value: 213,
-    props: ['form', 'keyword'],
+    props: {
+      form: {
+        type: Object,
+        default: () => {
+          return {
+            'a': 12
+          }
+        }
+      },
+      keyword: {
+        type: String,
+        default: 'a'
+      },
+      value: {
+        type: String | Number,
+        default: ''
+      }
+    },
     render,
     methods: {
         updateMsg() {
@@ -23,7 +39,7 @@ let base = {
           this.$emit('oInput', event)
           // this.configComponents.children[0].props.value = event
           // this.form[this.keyword] = event
-          this.form[this.keyword] = this.value = event
+          this.form[this.keyword] = this.val = event
           console.log(this.form)
         }
     },
@@ -43,18 +59,17 @@ let base = {
                   input: this.input
               },
               props: {
-                value: this.value
+                value: this.val
               },
-              children: [ '确定', {
-                  name: 'span',
-              } ]
+              children: []
           }]
         }
       },
     },
     created() {
-      this.value = this.form[this.keyword]
+      this.val = this.value || (this.keyword && this.form[this.keyword]) || ''
     },
-    mounted() {}
+    mounted() {
+    }
 };
 export default base

@@ -13,6 +13,9 @@ import oHtmlRender from './views/OGV-form-design/components/o-htmlRender'
 import oFormRender from './views/OGV-form-design/components/o-formRender'
 
 import 'element-ui/lib/theme-chalk/index.css';
+import Tinymce from '@/components/tinymce/index.vue'
+
+Vue.component('tinymce', Tinymce)
 Vue.use(ElementUI);
 Vue.use(OGVSchema);
 Vue.component('oButton', oButton)
