@@ -16,7 +16,11 @@ let base = {
         children: {
             type: Array,
             default: () => ['确定']
-        }
+        },
+        // style: {
+        //     type: Object,
+        //     default: () => {}
+        // },
     },
     computed: {
         ...computed,
@@ -24,10 +28,11 @@ let base = {
             return {
               children: [{
                   name: 'el-button',
-                  attr: {
+                  style: this.style,
+                  attrs: Object.assign({
                       size: 'small',
                       type: 'primary',
-                  },
+                  }, this.attrs),
                   ref: 'oButton',
                   jNode: 'oButton',
                   on: this.on,
@@ -51,14 +56,4 @@ let base = {
         console.log(this.on)
     }
 };
-// let oButton = config => {
-//     if (config) {
-//         // 根据配置增强基础配置
-//         return deal(config, base)
-//     } else {
-//         // 输出基础配置
-//         console.log(base)
-//         return base
-//     }
-// }
 export default base

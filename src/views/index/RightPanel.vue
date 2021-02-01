@@ -12,96 +12,21 @@
         <!-- 组件属性 -->
         <el-form v-show="currentTab==='field' && showField" v-if="activeData" size="small" label-width="90px">
           <div v-if="activeData.name">
-            <el-form-item label="props" v-if="false">
-              <div v-for="(i) in getList('props')" :key="i" :label="i" label-width="40px">
-                <span>{{i}}</span>
-                <el-input v-model="activeData.props[i]" placeholder="请输入字段名（v-model）"  style="width: 165px"/>
-                <i class="el-icon-close" @click="delKey(i, 'props')" />
-              </div>
-              <div v-if="modifyItem.hasOwnProperty('props')" >
-                <el-input v-model="modifyItem.props.key" style="width: 65px" />：
-                <el-select v-model="modifyItem.props.type" style="width: 86px">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
-                <el-input v-model="modifyItem.props.value" v-if="modifyItem.hasOwnProperty('props')"  style="width: 80px" />
-              </div>
-              <el-button @click="!modifyItem.props ? addProperty('props') : saveProperty('props')">{{!modifyItem.props ? '新建' : '保存'}}</el-button> <el-button @click="delModifyItem('props')">取消</el-button>
-            </el-form-item>
-            <infiniteObject :activeData="activeData"></infiniteObject>
-            <el-form-item label="children">
-              <el-form-item v-for="(i) in getList('props')" :key="i" :label="i" label-width="40px">
-                <el-input v-model="activeData.props[i]" placeholder="请输入字段名（v-model）" />
-              </el-form-item>
-              <div v-if="modifyItem.hasOwnProperty('children')" >
-                <el-input v-model="modifyItem.children.key" style="width: 65px" />：<el-input v-model="modifyItem.children.value" v-if="modifyItem.hasOwnProperty('children')"  style="width: 80px" />
-              </div>
-              <el-button @click="!modifyItem.children ? addChildren('children') : saveChildren('children')">{{!modifyItem.children ? '新建' : '保存'}}</el-button> <el-button @click="delModifyItem('children')">取消</el-button>
-            </el-form-item>
-            <el-form-item label="class">
-              <el-form-item v-for="(i) in getList('class')" :key="i" :label="i" label-width="40px">
-                <el-input v-model="activeData.props[i]" placeholder="请输入字段名（v-model）" />
-              </el-form-item>
-            </el-form-item>
-            <el-form-item label="style">
-              <el-form-item v-for="(i) in getList('style')" :key="i" :label="i" label-width="40px">
-                <el-input v-model="activeData.props[i]" placeholder="请输入字段名（v-model）" />
-              </el-form-item>
-            </el-form-item>
-            <el-form-item label="attrs">
-              <el-form-item v-for="(i) in getList('attrs')" :key="i" :label="i" label-width="40px">
-                <el-input v-model="activeData.props[i]" placeholder="请输入字段名（v-model）" />
-              </el-form-item>
-            </el-form-item>
-            <el-form-item label="domProps">
-              <el-form-item v-for="(i) in getList('domProps')" :key="i" :label="i" label-width="40px">
-                <el-input v-model="activeData.props[i]" placeholder="请输入字段名（v-model）" />
-              </el-form-item>
-            </el-form-item>
-            <el-form-item label="on">
-              <el-form-item v-for="(i) in getList('on')" :key="i" :label="i" label-width="40px">
-                <el-input v-model="activeData.props[i]" placeholder="请输入字段名（v-model）" />
-              </el-form-item>
-            </el-form-item>
-            <el-form-item label="nativeOn">
-              <el-form-item v-for="(i) in getList('nativeOn')" :key="i" :label="i" label-width="40px">
-                <el-input v-model="activeData.props[i]" placeholder="请输入字段名（v-model）" />
-              </el-form-item>
-            </el-form-item>
-            <el-form-item label="directives">
-              <el-form-item v-for="(i) in getList('directives')" :key="i" :label="i" label-width="40px">
-                <el-input v-model="activeData.directives[i]" placeholder="请输入字段名（v-model）" />
-              </el-form-item>
-            </el-form-item>
-            <el-form-item label="scopedSlots">
-              <el-form-item v-for="(i) in getList('scopedSlots')" :key="i" :label="i" label-width="40px">
-                <el-input v-model="activeData.scopedSlots[i]" placeholder="请输入字段名（v-model）" />
-              </el-form-item>
-            </el-form-item>
-            <el-form-item label="slot">
-              <el-form-item v-for="(i) in getList('slot')" :key="i" :label="i" label-width="40px">
-                <el-input v-model="activeData.slot[i]" placeholder="请输入字段名（v-model）" />
-              </el-form-item>
-            </el-form-item>
-            <el-form-item label="key">
-              <el-form-item v-for="(i) in getList('key')" :key="i" :label="i" label-width="40px">
-                <el-input v-model="activeData.key[i]" placeholder="请输入字段名（v-model）" />
-              </el-form-item>
-            </el-form-item>
-            <el-form-item label="ref">
-              <el-form-item v-for="(i) in getList('ref')" :key="i" :label="i" label-width="40px">
-                <el-input v-model="activeData.ref[i]" placeholder="请输入字段名（v-model）" />
-              </el-form-item>
-            </el-form-item>
-            <el-form-item label="refInFor">
-              <el-form-item v-for="(i) in getList('refInFor')" :key="i" :label="i" label-width="40px">
-                <el-input v-model="activeData.refInFor[i]" placeholder="请输入字段名（v-model）" />
-              </el-form-item>
-            </el-form-item>
+            <!-- <InfiniteObject :activeData="activeData.props" rootWord="props"></InfiniteObject> -->
+            <InfiniteObject :activeData="activeData.props" rootWord="children"></InfiniteObject>
+            <InfiniteObject :activeData="activeData.props" rootWord="class"></InfiniteObject>
+            <InfiniteObject :activeData="activeData.props" rootWord="style"></InfiniteObject>
+            <InfiniteObject :activeData="activeData.props" rootWord="attrs"></InfiniteObject>
+            <!-- <InfiniteObject :activeData="activeData.props" rootWord="domProps"></InfiniteObject>
+            <InfiniteObject :activeData="activeData.props" rootWord="on"></InfiniteObject>
+            <InfiniteObject :activeData="activeData.props" rootWord="nativeOn"></InfiniteObject>
+            <InfiniteObject :activeData="activeData.props" rootWord="directives"></InfiniteObject>
+            <InfiniteObject :activeData="activeData.props" rootWord="scopedSlots"></InfiniteObject>
+            <InfiniteObject :activeData="activeData.props" rootWord="slot"></InfiniteObject>
+            <InfiniteObject :activeData="activeData.props" rootWord="key"></InfiniteObject>
+            <InfiniteObject :activeData="activeData.props" rootWord="ref"></InfiniteObject>
+            <InfiniteObject :activeData="activeData.props" rootWord="scopedSlots"></InfiniteObject>
+            <InfiniteObject :activeData="activeData.props" rootWord="refInFor"></InfiniteObject> -->
           </div>
           <el-form-item v-if="activeData.__config__.changeTag" label="组件类型">
             <el-select
@@ -728,7 +653,8 @@ import { isNumberStr } from '@/utils/index'
 import {
   inputComponents, selectComponents, layoutComponents
 } from '@/components/generator/config'
-import infiniteObject from './components/infiniteObject.js'
+import InfiniteObject from './components/infiniteObject.js'
+// import ComponentConfigDetail from './components/infiniteObject.js'
 import { saveFormConf } from '@/utils/db'
 
 const dateTimeFormat = {
@@ -748,7 +674,8 @@ const needRerenderList = ['tinymce']
 export default {
   components: {
     TreeNodeDialog,
-    infiniteObject
+    InfiniteObject,
+    // ComponentConfigDetail
     // IconsDialog
   },
   props: ['showField', 'activeData', 'formConf'],

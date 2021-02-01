@@ -47,33 +47,20 @@ const layouts = {
   oFormItem(h, currentItem, index, list) {
     const { activeItem } = this.$listeners
     const config = currentItem.__config__
-    const child = renderChildren.apply(this, arguments)
     let className = this.activeId === config.formId ? 'drawing-item active-from-item' : 'drawing-item'
     if (this.formConf.unFocusedComponentBorder) className += ' unfocus-bordered'
-    let labelWidth = config.labelWidth ? `${config.labelWidth}px` : null
     if (config.showLabel === false) labelWidth = '0'
-    console.log(list)
-    console.log(index)
     console.log(currentItem)
-    console.log([ currentItem ])
     let configData = analysisDataRender([ currentItem ]);
-    console.log(configData)
     let configArr = analysisRenderConfig(configData, h); 
+    console.log('data23yhbfpoanfvioasd')
     console.log(configArr)
     return (
       <el-col span={config.span} class={className}
         nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}>
         <el-form-item label-width="0px"
           label={config.showLabel ? config.label : ''} required={config.required}>
-          {h(
-              'span',
-              {
-                  attrs: {
-                      class: 'foo'
-                  }
-              },
-              configArr
-          )}
+          {configArr[0]}
         </el-form-item>
         {components.itemBtns.apply(this, arguments)}
       </el-col>

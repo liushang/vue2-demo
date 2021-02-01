@@ -257,6 +257,7 @@ export default {
       }
     },
     activeFormItem(currentItem) {
+      // if (!currentItem.props) currentItem.props = {}
       this.activeData = currentItem
       this.activeId = currentItem.__config__.formId
     },
@@ -409,7 +410,7 @@ export default {
 }
 
 .left-board {
-  width: 260px;
+  width: 180px;
   position: absolute;
   left: 0;
   top: 0;
@@ -429,7 +430,7 @@ export default {
 .center-board {
   height: 100vh;
   width: auto;
-  margin: 0 550px 0 260px;
+  margin: 0 550px 0 180px;
   box-sizing: border-box;
 }
 .empty-info{

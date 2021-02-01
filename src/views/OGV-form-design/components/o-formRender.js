@@ -6,7 +6,6 @@ let base = {
           form: {
             'form-item-0': 1
           },
-          aaa: 2342
         }
     },
     props: {
@@ -32,7 +31,6 @@ let base = {
         },
         submit(e) {
           console.log('submit');
-          console.log(this.aaa)
           console.log(e)
         }
     },
@@ -65,7 +63,6 @@ let base = {
             })
           }
           // if (needOnclick.includes(x.name)) {
-          console.log('增加click事件')
           if (x.on) x.props.on = Object.assign(x.on || {}, {
             click: this.submit
           })

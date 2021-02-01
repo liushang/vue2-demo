@@ -31,8 +31,41 @@ export const oComponents = [
     children: [
       '1'
     ],
+    props: {
+      children: [
+        '1'
+      ],
+    },
     __config__: {
       label: 'el-button',
+      layout: 'oFormItem',
+    },
+  }, {
+    name: 'oRow',
+    children: [
+      '1'
+    ],
+    props: {
+      children: [
+        '1'
+      ],
+    },
+    __config__: {
+      label: 'el-Row',
+      layout: 'oFormItem',
+    },
+  }, {
+    name: 'oCol',
+    children: [
+      '1'
+    ],
+    props: {
+      children: [
+        '1'
+      ],
+    },
+    __config__: {
+      label: 'el-Col',
       layout: 'oFormItem',
     },
   }

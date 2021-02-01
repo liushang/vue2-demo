@@ -55,16 +55,17 @@ export function analysisRenderConfig(configData, createElement) {
     if (configData) {
         let renderArr = [];
         for (let i of configData) {
-            if (i.raw.vFor && i.raw.vFor.length > 0) {
-                for (let o = 0; o < i.raw.vFor.length; o++) {
-                    let e = JSON.parse(JSON.stringify(i));
-                    e.raw.props.value = i.raw.vFor[o].value || i.raw.vFor[o];
-                    e.raw.props.label = i.raw.vFor[o].label || i.raw.vFor[o];
-                    renderArr.push(dealChild(e, createElement));
-                }
-            } else if (!(i.vIf && i.vIf === false)) {
-                renderArr.push(dealChild(i, createElement));
-            }
+            // if (i.raw.vFor && i.raw.vFor.length > 0) {
+            //     for (let o = 0; o < i.raw.vFor.length; o++) {
+            //         let e = JSON.parse(JSON.stringify(i));
+            //         e.raw.props.value = i.raw.vFor[o].value || i.raw.vFor[o];
+            //         e.raw.props.label = i.raw.vFor[o].label || i.raw.vFor[o];
+            //         renderArr.push(dealChild(e, createElement));
+            //     }
+            // } else if (!(i.vIf && i.vIf === false)) {
+            //     renderArr.push(dealChild(i, createElement));
+            // }
+            renderArr.push(dealChild(i, createElement));
         }
         // console.log(JSON.parse(JSON.stringify(renderArr)))
         return renderArr;
@@ -77,11 +78,6 @@ function dealChild(child, cb) {
     if (!Array.isArray(child.value)) { // 简单类型
         return child.value;
     } else {
-        // jsx 语法渲染
-        // if (child.raw.name === 'oSelect') {
-        //     console.log('oSelect');
-        //     console.log(child);
-        // }
         let item = {
             'class': child.raw['class'],
             style: child.raw.style,

@@ -11,6 +11,8 @@ import oInput from './views/OGV-form-design/components/o-inputRender'
 import oHtml from './views/OGV-form-design/components/o-htmlRender'
 import oHtmlRender from './views/OGV-form-design/components/o-htmlRender'
 import oFormRender from './views/OGV-form-design/components/o-formRender'
+import oRowRender from './views/OGV-form-design/components/o-rowRender'
+import oColRender from './views/OGV-form-design/components/o-colRender'
 
 import 'element-ui/lib/theme-chalk/index.css';
 import Tinymce from '@/components/tinymce/index.vue'
@@ -23,6 +25,8 @@ Vue.component('oInput', oInput)
 Vue.component('oHtml', oHtml)
 Vue.component('oFormRender', oFormRender)
 Vue.component('oHtmlRender', oHtmlRender)
+Vue.component('oRow', oRowRender)
+Vue.component('oCol', oColRender)
 
 Vue.config.productionTip = false
 console.log(antd.VERSION)
