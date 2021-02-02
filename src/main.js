@@ -29,11 +29,12 @@ Vue.component('oRow', oRowRender)
 Vue.component('oCol', oColRender)
 
 Vue.config.productionTip = false
-console.log(antd.VERSION)
+console.log(Vue)
 /* eslint-disable no-new */
-new Vue({
+let oo = new Vue({
   el: '#app',
   router,
   components: { App },
   template: '<App/>'
 })
+console.log(oo)

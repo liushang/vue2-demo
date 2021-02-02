@@ -13,9 +13,9 @@
         <el-form v-show="currentTab==='field' && showField" v-if="activeData" size="small" label-width="90px">
           <div v-if="activeData.name">
             <!-- <InfiniteObject :activeData="activeData.props" rootWord="props"></InfiniteObject> -->
-            <InfiniteObject :activeData="activeData.props" rootWord="children"></InfiniteObject>
+            <InfiniteObject :activeData="activeData.props" rootWord="children" @changeComponentPanel="changeComponentPanel"></InfiniteObject>
             <InfiniteObject :activeData="activeData.props" rootWord="class"></InfiniteObject>
-            <InfiniteObject :activeData="activeData.props" rootWord="style"></InfiniteObject>
+            <InfiniteObject :activeData="activeData.props" rootWord="styles"></InfiniteObject>
             <InfiniteObject :activeData="activeData.props" rootWord="attrs"></InfiniteObject>
             <!-- <InfiniteObject :activeData="activeData.props" rootWord="domProps"></InfiniteObject>
             <InfiniteObject :activeData="activeData.props" rootWord="on"></InfiniteObject>
@@ -640,11 +640,10 @@
         </el-form>
       </el-scrollbar>
     </div>
-
     <treeNode-dialog :visible.sync="dialogVisible" title="添加选项" @commit="addNode" />
   </div>
 </template>
-
+ 
 <script>
 import { isArray } from 'util'
 import TreeNodeDialog from '@/views/index/TreeNodeDialog'
@@ -849,6 +848,10 @@ export default {
     }
   },
   methods: {
+    // 向上传递改变组件面板内容
+    changeComponentPanel(data, property, subProperty) {
+      this.$emit('panelContent', data, property, subProperty)
+    },
     getList(key, data = this.activeData) {
       let list = []
       if (data) {

@@ -3,7 +3,7 @@
     <div class="left-board">
       <div class="logo-wrapper">
         <div class="logo">
-          <img :src="logo" alt="logo"> Form Generator
+          <img :src="logo" alt="logo"> OGVForm
         </div>
       </div>
       <el-scrollbar class="left-scrollbar">
@@ -72,6 +72,15 @@
       :form-conf="formConf"
       :show-field="!!drawingList.length"
       @tag-change="tagChange"
+      @panelContent="panelContent"
+      @fetch-data="fetchData"
+    />
+    <panel-dialog
+      :active-data="convertConstrutor(dialogComponentDetail)"
+      :form-conf="formConf"
+      v-if="showPanel"
+      @close="closePanelDialog"
+      @tag-change="tagChange"
       @fetch-data="fetchData"
     />
     <input id="copyNode" type="hidden">
@@ -81,23 +90,18 @@
 <script>
 import draggable from 'vuedraggable'
 import { debounce } from 'throttle-debounce'
-import { saveAs } from 'file-saver'
-import ClipboardJS from 'clipboard'
 import render from '@/components/render/render'
 // import FormDrawer from './FormDrawer'
 // import JsonDrawer from './JsonDrawer'
 import RightPanel from './RightPanel'
+import PanelDialog from './PanelDialog'
+
 import {
   inputComponents, selectComponents, layoutComponents, formConf, oComponents
 } from '@/components/generator/config'
 import {
   exportDefault, beautifierConf, isNumberStr, titleCase, deepClone
 } from '@/utils/index'
-import {
-  makeUpHtml, vueTemplate, vueScript, cssStyle
-} from '@/components/generator/html'
-import { makeUpJs } from '@/components/generator/js'
-import { makeUpCss } from '@/components/generator/css'
 import drawingDefalut from '@/components/generator/drawingDefalut'
 import logo from '@/assets/logo.png'
 import CodeTypeDialog from './CodeTypeDialog'
@@ -107,7 +111,6 @@ import {
 } from '@/utils/db'
 import loadBeautifier from '@/utils/loadBeautifier'
 
-let beautifier
 const emptyActiveData = { style: {}, autosize: {} }
 let oldActiveId
 let tempActiveData
@@ -123,6 +126,7 @@ export default {
     // FormDrawer,
     // JsonDrawer,
     RightPanel,
+    PanelDialog,
     CodeTypeDialog,
     DraggableItem
   },
@@ -167,7 +171,10 @@ export default {
           title: 'o型组件',
           list: oComponents
         }
-      ]
+      ],
+      // 点击的组件结构数据
+      dialogComponentDetail: {},
+      showPanel: false
     }
   },
   watch: {
@@ -215,8 +222,32 @@ export default {
     loadBeautifier(btf => {
       beautifier = btf
     })
+    console.log(this)
   },
   methods: {
+    panelContent(data, property, subProperty) {
+      console.log('panelContent')
+      this.dialogComponentDetail = {
+        data, property, subProperty
+      }
+      this.showPanel = true
+    },
+    closePanelDialog(e) {
+      const { property, subProperty } = this.dialogComponentDetail
+      // this.activeData.props[property][subProperty] = e
+      this.$set(this.activeData.props[property], subProperty, e)
+      console.log('json编辑后')
+      this.showPanel = false
+    },
+    convertConstrutor(e) {
+      console.log(this.activeData)
+      let json = this.activeData.props[e.property][e.subProperty]
+      !json.props && (json.props = {
+          attrs: {},
+          children: [],
+        })
+      return json
+    },
     setObjectValueByStringKeys(obj, strKeys, val) {
       const arr = strKeys.split('.')
       arr.reduce((pre, item, i) => {

@@ -2,7 +2,9 @@
 import { render, computed } from '../../../schema/api';
 let base = {
     data() {
-        return {}
+        return {
+          style: {}
+        }
     },
     props: {
         on: {
@@ -16,7 +18,11 @@ let base = {
         subName: {
           type: String,
           default: ''
-        }
+        },
+        styles: {
+          type: Object,
+          default: () => {}
+      },
     },
     computed: {
         ...computed,
@@ -28,6 +34,7 @@ let base = {
                       size: 'small',
                       type: 'primary',
                   },
+                  style: Object.assign(this.style, this.styles),
                   ref: 'oHtml',
                   jNode: 'oHtml',
                   on: this.on,

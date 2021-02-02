@@ -6,6 +6,7 @@ import oButton from '../views/OGV-form-design/components/o-button.vue'
 import oButtonRender from '../views/OGV-form-design/components/o-buttonRender.js'
 import oInputRender from '../views/OGV-form-design/components/o-inputRender.js'
 import oFormRender from '../views/OGV-form-design/components/o-formRender.js'
+import oRowRender from '../views/OGV-form-design/components/o-rowRender.js'
 import oForm from '../views/OGV-form-design/oForm'
 import Home from '../views/index/Home.vue'
 
@@ -23,6 +24,10 @@ export default new Router({
       path: '/o-button',
       name: 'HelloWorld',
       component: oButton
+    }, {
+      path: '/o-row',
+      name: 'HelloWorld',
+      component: oRowRender
     }, {
       path: '/o-buttonRender',
       name: 'HelloWorld',

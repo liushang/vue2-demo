@@ -22,7 +22,11 @@ let base = {
       value: {
         type: String | Number,
         default: ''
-      }
+      },
+      styles: {
+        type: Object,
+        default: () => {}
+      },
     },
     render,
     methods: {
@@ -53,6 +57,7 @@ let base = {
                   size: 'small',
                   type: 'primary',
               },
+              style: Object.assign(this.style, this.styles),
               ref: 'oInput',
               on: {
                   blur: this.updateMsg,

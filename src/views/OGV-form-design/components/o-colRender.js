@@ -4,6 +4,7 @@ let base = {
     data() {
         return {
             val: '313',
+            style: {}
         }
     },
     props: {
@@ -17,12 +18,12 @@ let base = {
       },
       children: {
           type: Array,
-          default: () => ['确定']
+          default: () => ['确定', ',']
       },
-    //   style: {
-    //       type: Object,
-    //       default: () => {}
-    //   },
+      styles: {
+          type: Object,
+          default: () => {}
+      },
     },
     render,
     methods: {
@@ -36,12 +37,13 @@ let base = {
           children: [{
               name: 'el-col',
               attr: this.attrs,
+              style: Object.assign(this.style, this.styles),
               ref: 'oCol',
               on: {
                   blur: this.updateMsg,
                 //   input: this.input
               },
-              children: []
+              children: this.children
           }]
         }
       },

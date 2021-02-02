@@ -93,7 +93,6 @@ function dealChild(child, cb) {
             ref: child.raw.ref,
             refInFor: child.raw.refInFor
         };
-        console.log(item)
         if (child.raw.attr) {
             let attrs = {};
             let props = {};
@@ -196,10 +195,44 @@ export function analysisDataRender(configComponents, index) {
                 vIf: i.vIf,
                 raw: rawData
             };
-            if (configComponents[i].children) childrenData.value = analysisDataRender(configComponents[i].children, id);
+            if (configComponents[i].children) {
+                childrenData.value = analysisDataRender(configComponents[i].children, id);
+            } else {
+                console.log('触发了空')
+                childrenData.value = []
+            }
             // Vue.set(this.controlData, id, childrenData);
             configData.push(childrenData);
         }
     }
     return configData;
+}
+
+export function getDefaultProps (config) {
+    let props = config.props || {};
+    let propsIns = {}
+    const map = {
+        'Number': 0,
+        'String': '',
+        'Boolean': false,
+        'Object': {},
+        'Function': () => {},
+        'Array': []
+    }
+    for (let i in props) {
+        
+        if (props[i].type) {
+            const type = props[i].type;
+            if (Array === type || type === Object) {
+                if ('default' in props[i]) {
+                    propsIns[i] = props[i].default()
+                } else {
+                    propsIns[i] = map[type]
+                }
+            } else {
+                propsIns[i] = 'default' in props[i] ? props[i].default : map[type]
+            }
+        }
+    }
+    return propsIns
 }

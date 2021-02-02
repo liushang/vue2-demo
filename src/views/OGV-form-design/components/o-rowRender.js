@@ -17,12 +17,18 @@ let base = {
       },
       children: {
           type: Array,
-          default: () => ['确定']
+          default: () => [{
+              name: 'el-col',
+              attrs: {
+                  span: 4
+              },
+              children: [1]
+          }]
       },
-      // style: {
-      //     type: Object,
-      //     default: () => {}
-      // },
+      styles: {
+          type: Object,
+          default: () => {}
+      },
     },
     render,
     methods: {
@@ -36,6 +42,7 @@ let base = {
           children: [{
               name: 'el-row',
               attr: this.attrs,
+              style: Object.assign(this.style, this.styles),
               ref: 'oRow',
               on: {
                   blur: this.updateMsg,

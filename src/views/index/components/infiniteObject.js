@@ -1,3 +1,5 @@
+import { getDefaultProps } from '../../../schema/util'
+import Vue from 'vue'
 export default {
     data() {
         let options = [{
@@ -55,9 +57,6 @@ export default {
                 ),
             },
             detailValueTypeMap : {
-              // '1': e => <el-input v-model={e.value}  style="width: 80px" />,
-              // '2': e => <el-input v-model={e.value}  style="width: 80px" />,
-              // '3': e => <el-input v-model={e.value}  style="width: 80px" />,
               '1': e => <span>{e.value}</span>,
               '2': e => <span>{e.value}</span>,
               '3': e => <span>{e.value}</span>,
@@ -96,9 +95,9 @@ export default {
         {propertyList.map(x => {
             return (<el-form-item label={x} label-width="40px">
                 {['array', 'object'].includes(typeof this.activeData[rootWord][x]) ?
-                <span>{JSON.stringify(this.activeData[rootWord][x])}</span> :
+                <span onClick={() => this.analysisProperty(this.activeData, rootWord, x)}>{this.activeData[rootWord][x].name}</span> :
                 <el-input v-model={this.activeData[rootWord][x]} placeholder="请输入字段名（v-model）s"  style="width: 165px"/>}
-                <i class="el-icon-close" onClick={() => this.delKey(x, rootWord)} />
+                <i class="el-icon-error" onClick={() => this.delKey(x, rootWord)} style="margin-left: 5px;color: #409EFF"/>
             </el-form-item>)
         })}
         <el-form-item>
@@ -121,9 +120,6 @@ export default {
             // console.log(data[keyword])
             const options = this.options.map((x, i) => <el-option key={i} label={x.label} value={x.value}></el-option>)
             return data.hasOwnProperty(keyword) && data[keyword].type ? (<div><el-form-item>
-                {/* {
-                  !['1', '2', '3'].includes(data[keyword].type) ? <el-input v-model={data[keyword].key} style="width: 60px" /> : ''
-                } */}
                 <el-input v-model={data[keyword].key} style="width: 60px" />&nbsp;
                 <el-select v-model={data[keyword].type} style="width: 80px" onChange={e => this.changeOptions(e, keyword, data)}>
                   {options}
@@ -180,9 +176,14 @@ export default {
         saveProperty(key, data = this.activeData) {
           if (!(key in data)) this.$set(data, key, {})
           if (this.modifyItem[key].type !== '4' && this.modifyItem[key].type !== '5') {
-            if (this.modifyItem[key].value === 'oCol') {
+            // 如果输入的是组件。则增加此组件的相关配置
+            console.log(this.$root.$options.components.oCol.options.props)
+            if (this.$root.$options.components[this.modifyItem[key].value]) {
+              const comOptions = this.$root.$options.components[this.modifyItem[key].value].options
+              // 填充初始props属性
               const config = {
-                name: 'oCol'
+                name: this.modifyItem[key].value,
+                props: getDefaultProps(comOptions)
               }
               this.$set(this.activeData[key], this.modifyItem[key].key, config )
               console.log('增加子组件')
@@ -194,10 +195,6 @@ export default {
             // 复杂属性需要转换key、value变为对象
             const rootValue = this.modifyItem[key].value
             const transformValue = this.transformKeyValue(rootValue, this.modifyItem[key].type)
-            // console.log('保存复杂属性')
-            // console.log(this.activeData[key])
-            // console.log(this.modifyItem[key].key)
-            // console.log(transformValue)
             this.$set(this.activeData[key], this.modifyItem[key].key, transformValue )
           }
           console.log('新增属性')
@@ -251,10 +248,18 @@ export default {
           this.$delete(this.activeData[property], key)
           console.log(this.activeData)
         },
-        addSubComponent(e) {
-          console.log(e)
-          e.value = {
-            // name: 
+        // addSubComponent(e) {
+        //   console.log(e)
+        //   e.value = {
+        //     // name: 
+        //   }
+        // },
+        analysisProperty(data, property, subProperty) {
+          const x = data[property][subProperty]
+          // 如果是组件。则跳到相应组件编辑弹窗
+          if (x.name) {
+            this.$emit('changeComponentPanel', data, property, subProperty)
+            // this.$on('changeComponentPanel',)
           }
         }
     }

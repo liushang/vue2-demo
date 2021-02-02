@@ -2,7 +2,9 @@
 import { render, computed } from '../../../schema/api';
 let base = {
     data() {
-        return {}
+        return {
+            style: {}
+        }
     },
     props: {
         on: {
@@ -17,10 +19,10 @@ let base = {
             type: Array,
             default: () => ['确定']
         },
-        // style: {
-        //     type: Object,
-        //     default: () => {}
-        // },
+        styles: {
+            type: Object,
+            default: () => {}
+        },
     },
     computed: {
         ...computed,
@@ -28,7 +30,7 @@ let base = {
             return {
               children: [{
                   name: 'el-button',
-                  style: this.style,
+                  style: Object.assign(this.style, this.styles),
                   attrs: Object.assign({
                       size: 'small',
                       type: 'primary',
