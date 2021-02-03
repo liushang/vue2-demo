@@ -110,6 +110,8 @@ import {
   getDrawingList, saveDrawingList, getIdGlobal, saveIdGlobal, getFormConf
 } from '@/utils/db'
 import loadBeautifier from '@/utils/loadBeautifier'
+import { getDefaultProps } from '../../schema/util'
+import { getRawId } from '../../schema/util'
 
 const emptyActiveData = { style: {}, autosize: {} }
 let oldActiveId
@@ -118,7 +120,9 @@ const drawingListInDB = getDrawingList()
 console.log('drawingListInDB', drawingListInDB)
 const formConfInDB = getFormConf()
 const idGlobal = getIdGlobal()
-
+// const globalProperties = {
+//   children: 
+// }
 export default {
   components: {
     draggable,
@@ -174,7 +178,8 @@ export default {
       ],
       // 点击的组件结构数据
       dialogComponentDetail: {},
-      showPanel: false
+      showPanel: false,
+      previewItem: null
     }
   },
   watch: {
@@ -222,11 +227,25 @@ export default {
     loadBeautifier(btf => {
       beautifier = btf
     })
-    console.log(this)
+    this.$root.$off('DEAL_CHOOSE');
+    this.$root.$on('DEAL_CHOOSE', (item) => {
+      console.log(item)
+      console.log('DEAL_CHOOSE')
+      console.log(item.$parent.$parent.$parent)
+      if (this.previewItem) this.previewItem.style.border = ''
+      this.$set(item.style, 'border', '1px solid red')
+      let rawId = item.rawId
+      setTimeout(() => {
+        console.log(rawId)
+        let activeSubItem = this.getRawIdItem(this.activeData, rawId)
+        if (activeSubItem) this.activeFormItem(activeSubItem)
+      }, 0)
+      this.previewItem = item
+    })
   },
+  
   methods: {
     panelContent(data, property, subProperty) {
-      console.log('panelContent')
       this.dialogComponentDetail = {
         data, property, subProperty
       }
@@ -236,11 +255,9 @@ export default {
       const { property, subProperty } = this.dialogComponentDetail
       // this.activeData.props[property][subProperty] = e
       this.$set(this.activeData.props[property], subProperty, e)
-      console.log('json编辑后')
       this.showPanel = false
     },
     convertConstrutor(e) {
-      console.log(this.activeData)
       let json = this.activeData.props[e.property][e.subProperty]
       !json.props && (json.props = {
           attrs: {},
@@ -287,10 +304,34 @@ export default {
         if (t) t.value = val
       }
     },
+    getRawIdItem(currentItem, id) {
+      console.log(currentItem.name)
+      if (typeof currentItem !== 'object') return
+      // for(let i of currentItem) {
+        if (currentItem && currentItem.props) {
+          if (currentItem.props.rawId === id) {
+            console.log('找到了', currentItem)
+            return currentItem
+          } else {
+            if (!currentItem.props.children) return
+            for (let y of currentItem.props.children) {
+              let oo = this.getRawIdItem(y, id)
+              if (oo) return oo
+            }
+          }
+        // }
+      }
+    },
     activeFormItem(currentItem) {
-      // if (!currentItem.props) currentItem.props = {}
+      const comOptions = getDefaultProps(this.$root.$options.components[currentItem.name].options)
+      for(let i in comOptions) {
+        if (!currentItem.props[i]) this.$set(currentItem.props, i, comOptions[i])
+        // this.$set(currentItem.props.attrs, i, comOptions[i])
+      }
+      if (!currentItem.props.rawId) currentItem.props.rawId = getRawId()
+      console.log('activeFormItem', currentItem)
       this.activeData = currentItem
-      this.activeId = currentItem.__config__.formId
+      // this.activeId = currentItem.__config__.formId
     },
     onEnd(obj) {
       if (obj.from !== obj.to) {
@@ -301,6 +342,7 @@ export default {
     },
     // 添加组件 点击复制
     addComponent(item) {
+      console.log('点击复制', item)
       const clone = this.cloneComponent(item)
       this.fetchData(clone)
       console.log(clone)
@@ -441,7 +483,7 @@ export default {
 }
 
 .left-board {
-  width: 180px;
+  width: 200px;
   position: absolute;
   left: 0;
   top: 0;
@@ -461,7 +503,7 @@ export default {
 .center-board {
   height: 100vh;
   width: auto;
-  margin: 0 550px 0 180px;
+  margin: 0 550px 0 200px;
   box-sizing: border-box;
 }
 .empty-info{

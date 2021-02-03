@@ -14,9 +14,6 @@ export const computed = {
 
 export function render(h) {
   // this.configData = analysisDataRender(this.configComponents.children);
-  console.log(this.configData)
   let configArr = analysisRenderConfig(this.configData, h); 
-  console.log('configArr', configArr)
-  console.log(configArr)
   return configArr[0]
 }

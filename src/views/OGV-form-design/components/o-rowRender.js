@@ -3,7 +3,7 @@ import { render, computed } from '../../../schema/api';
 let base = {
     data() {
         return {
-            val: '313',
+            style: {}
         }
     },
     props: {
@@ -22,7 +22,7 @@ let base = {
               attrs: {
                   span: 4
               },
-              children: [1]
+              children: []
           }]
       },
       styles: {
@@ -33,6 +33,9 @@ let base = {
     render,
     methods: {
         updateMsg() {
+        },
+        click() {
+          console.log('啊啊啊啊啊啊啊啊啊啊啊啊')
         },
     },
     computed: {
@@ -45,8 +48,8 @@ let base = {
               style: Object.assign(this.style, this.styles),
               ref: 'oRow',
               on: {
-                  blur: this.updateMsg,
-                  // input: this.input
+                click: this.click,
+                  ...this.on
               },
               children: this.children
           }]

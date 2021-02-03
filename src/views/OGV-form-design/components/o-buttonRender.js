@@ -3,7 +3,8 @@ import { render, computed } from '../../../schema/api';
 let base = {
     data() {
         return {
-            style: {}
+            style: {
+            }
         }
     },
     props: {
@@ -20,8 +21,16 @@ let base = {
             default: () => ['确定']
         },
         styles: {
-            type: Object,
-            default: () => {}
+          type: Object,
+          default: () => {
+            return {
+              border: '1px solid #409EFF'
+            }
+          }
+        },
+        rawId: {
+            type: Number,
+            default: 0
         },
     },
     computed: {
@@ -37,7 +46,25 @@ let base = {
                   }, this.attrs),
                   ref: 'oButton',
                   jNode: 'oButton',
-                  on: this.on,
+                  on: {
+                      click: e => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          console.log('啊啊啊啊啊啊啊啊啊啊按钮')
+                          console.log(this)
+                          this.$root.$emit('DEAL_CHOOSE', this)
+                      },
+                      ...this.on
+                  },
+                  props: {
+                    rawId: this.rawId
+                  },
+                  nativeOn: {
+                    // click: () => {
+                    //   console.log('啊啊啊啊啊啊啊啊啊啊啊啊')
+                    //   this.$root.$emit('DEAL_CHOOSE', this)
+                    // },
+                  },
                   children: this.children
               }]
             }

@@ -1,4 +1,4 @@
-import { getDefaultProps } from '../../../schema/util'
+import { getDefaultProps, getRawId } from '../../../schema/util'
 import Vue from 'vue'
 export default {
     data() {
@@ -40,7 +40,7 @@ export default {
                             {this.getValue(e, 'value')}
                         </el-form-item>
                         {e.value.hasOwnProperty('key') ? <el-button onClick={() => this.delModifyItem(e, 'value')}>取消</el-button> : <el-button onClick={() => this.addProperty(e, 'value', '4')}>新建</el-button>}
-                        {this.rootWord === 'children' ? <el-button onClick={() => this.addSubComponent(e, 'value')}>添加子组件</el-button> : ''}
+                        {/* {this.rootWord === 'children' ? <el-button onClick={() => this.addSubComponent(e, 'value')}>添加子组件</el-button> : ''} */}
                     </el-form-item>
                 ),
                 '5': e => (
@@ -93,27 +93,31 @@ export default {
         const rootWord = this.rootWord
         return (<el-form-item label={this.rootWord}>
         {propertyList.map(x => {
-            return (<el-form-item label={x} label-width="40px">
-                {['array', 'object'].includes(typeof this.activeData[rootWord][x]) ?
+            return (<el-form-item label={['string', 'number', 'boolean'].includes(typeof this.activeData[rootWord]) ? '' : x} label-width="82px">
+              {['string', 'number', 'boolean'].includes(typeof this.activeData[rootWord]) ? <el-input v-model={this.activeData[rootWord]} placeholder="请输入字段名（v-model）s"  style="width: 165px"/> :
+                ['array', 'object'].includes(typeof this.activeData[rootWord][x]) ?
                 <span onClick={() => this.analysisProperty(this.activeData, rootWord, x)}>{this.activeData[rootWord][x].name}</span> :
                 <el-input v-model={this.activeData[rootWord][x]} placeholder="请输入字段名（v-model）s"  style="width: 165px"/>}
+              {
+                ['string', 'number', 'boolean'].includes(typeof this.activeData[rootWord]) ? '' :
                 <i class="el-icon-error" onClick={() => this.delKey(x, rootWord)} style="margin-left: 5px;color: #409EFF"/>
+              }
             </el-form-item>)
         })}
         <el-form-item>
         {this.getValue(modifyItem, rootWord)}
         </el-form-item>
-        <el-button onClick={() => !modifyItem[rootWord] ? this.addProperty(modifyItem, rootWord, '4', 'rootWord') : this.saveProperty(rootWord)}>{!modifyItem[rootWord] ? '新建' : '保存'}</el-button> <el-button onClick={() => this.delModifyItem(modifyItem, rootWord)}>取消</el-button>
+        {
+          // 简单属性不可新增和取消
+          ['string', 'number', 'boolean'].includes(typeof this.activeData[rootWord]) ? ''
+          :
+          <div>
+          <el-button onClick={() => !modifyItem[rootWord] ? this.addProperty(modifyItem, rootWord, null, 'rootWord') : this.saveProperty(rootWord)}>{!modifyItem[rootWord] ? '新建' : '保存'}</el-button> <el-button onClick={() => this.delModifyItem(modifyItem, rootWord)}>取消</el-button>
+          </div>
+        }
     </el-form-item>)
     },
     mounted() {
-      // if (!this.activeData[this.rootWord]) {
-      //   if (this.rootWord === 'children') {
-      //     this.activeData[this.rootWord] = []
-      //   } else {
-      //     this.activeData[this.rootWord] = {}
-      //   }
-      // }
     },
     methods: {
         getValue(data, keyword) {
@@ -132,8 +136,12 @@ export default {
         getList(key, data = this.activeData) {
           let list = []
           if (data) {
-            for (const i in data[key]) {
-              list.push(i)
+            if (typeof data[key] === 'object') {
+              for (const i in data[key]) {
+                list.push(i)
+              }
+            } else {
+              list.push(data[key])
             }
           }
           return list
@@ -151,7 +159,7 @@ export default {
             data[key].value = e === '5' ? [] : this.valueTypeInitial[e]
         },
         addProperty(data, key, type, rootName) {
-          console.log(data)
+          if (!type) type = typeof this.activeData[key] === 'object' ? '4' : Array.isArray(this.activeData[key]) ? '5' : '1'
           if (type === '4') {
             this.$set(data, key, {
               // children做特殊处理
@@ -171,22 +179,25 @@ export default {
               })
             }
             this.$set(data, key, arr)
+          } else {
+            this.$set(data, key, '')
           }
         },
         saveProperty(key, data = this.activeData) {
           if (!(key in data)) this.$set(data, key, {})
           if (this.modifyItem[key].type !== '4' && this.modifyItem[key].type !== '5') {
             // 如果输入的是组件。则增加此组件的相关配置
-            console.log(this.$root.$options.components.oCol.options.props)
+            // console.log(this.$root.$options.components.oCol.options.props)
             if (this.$root.$options.components[this.modifyItem[key].value]) {
               const comOptions = this.$root.$options.components[this.modifyItem[key].value].options
               // 填充初始props属性
+              // let aaa = window.Math.random()
               const config = {
                 name: this.modifyItem[key].value,
-                props: getDefaultProps(comOptions)
+                props: getDefaultProps(comOptions),
               }
-              this.$set(this.activeData[key], this.modifyItem[key].key, config )
-              console.log('增加子组件')
+              if (!config.props.rawId) config.props.rawId = getRawId()
+              this.$set(this.activeData[key], this.modifyItem[key].key, config)
             } else {
               // 简单属性直接保存
               this.$set(this.activeData[key], this.modifyItem[key].key, this.modifyItem[key].value )
@@ -197,8 +208,6 @@ export default {
             const transformValue = this.transformKeyValue(rootValue, this.modifyItem[key].type)
             this.$set(this.activeData[key], this.modifyItem[key].key, transformValue )
           }
-          console.log('新增属性')
-          console.log(this.activeData)
           this.modifyItem = {}
         },
         // key-value对象转化为正常对象
@@ -244,9 +253,7 @@ export default {
 
         },
         delKey(key, property) {
-          console.log('delete')
           this.$delete(this.activeData[property], key)
-          console.log(this.activeData)
         },
         // addSubComponent(e) {
         //   console.log(e)

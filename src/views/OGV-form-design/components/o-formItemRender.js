@@ -15,21 +15,17 @@ let base = {
         type: Object,
         default: () => {
           return {
-            'label-width': '100px',
+            // 'label-width': '100px',
           }
         }
       },
       children: {
         type: Array,
-        default: () => []
+        default: () => ['确定']
       },
       styles: {
         type: Object,
-        default: () => {
-          return {
-            border: '1px solid #409EFF'
-          }
-        }
+        default: () => {}
       },
       rawId: {
         type: Number,
@@ -38,39 +34,30 @@ let base = {
     },
     render,
     methods: {
-        updateMsg() {
-            console.log('updateMsg');
-        },
         change() {
             console.log('我是change');
         },
-        input(event) {
-          this.value = event
-        },
-        submit(e) {
-          console.log('submit');
-          console.log(e)
-        }
     },
     computed: {
       ...computed,
       configComponents() {
         return {
           children: [{
-              name: 'el-form',
-              ref: 'oForm',
+              name: 'el-form-item',
+              ref: 'oFormItem',
               on: {
-                  blur: this.updateMsg,
-                  input: this.input
+                click: () => {
+                  console.log('心疼的感觉')
+                }
               },
               attrs: {
                 model: this.form,
+                // labelWidth: this.labelWidth,
                 ...this.attrs
               },
               style: Object.assign(this.style, this.styles),
               props: {
-                value: this.value,
-                rawId: this.rawId
+                value: this.value
               },
               children: this.children
           }]

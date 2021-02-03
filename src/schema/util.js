@@ -25,7 +25,6 @@ export function deepClone1(obj) {
 
 // template字符串拼接
 export function analysisConfig(configData) {
-    console.log(configData);
     // let templateString = `<div><component :is="i" v-for="(i, index) in useConfig" :key="index"></component></div>`;
     let templateString = ``;
     if (!Array.isArray(configData)) configData = [ configData ];
@@ -40,14 +39,12 @@ export function analysisConfig(configData) {
                 }
             }
         }
-        console.log(staticParams);
         if (i.name) {
             templateString += `<${i.name} ${staticParams}>${i.children ? analysisConfig(i.children) : ''}</${i.name}>`;
         } else {
             templateString += i.value;
         }
     }
-    console.log(templateString);
     return templateString;
 }
 // render拼接
@@ -67,7 +64,6 @@ export function analysisRenderConfig(configData, createElement) {
             // }
             renderArr.push(dealChild(i, createElement));
         }
-        // console.log(JSON.parse(JSON.stringify(renderArr)))
         return renderArr;
     }
 }
@@ -115,8 +111,6 @@ function dealChild(child, cb) {
 }
 
 export function dealConfigJSON(configJson) {
-    console.log('dealConfigJSON');
-    console.log(configJson);
     let components = {};
     for (let i of configJson) {
         components[i.name] = resolve => {
@@ -136,14 +130,10 @@ export function getComponent(callBack, { path, delay = 1 }, param) {
 export function analysisData(configComponents, index) {
     // 构建组件数据
     const configData = [];
-    console.log('configComponents');
-    console.log(configComponents);
     for (let i = 0; i < configComponents.length; i++) {
         const rawData = deepClone1(configComponents[i]);
         delete rawData.children;
-        console.log('rawData', rawData);
         let id = index === undefined ? 0 : index + '-' + i;
-        // console.log(id);
         if (typeof configComponents[i] !== 'object') { // 简单类型
             const childrenData = {
                 type: 'simple',
@@ -198,7 +188,6 @@ export function analysisDataRender(configComponents, index) {
             if (configComponents[i].children) {
                 childrenData.value = analysisDataRender(configComponents[i].children, id);
             } else {
-                console.log('触发了空')
                 childrenData.value = []
             }
             // Vue.set(this.controlData, id, childrenData);
@@ -220,12 +209,13 @@ export function getDefaultProps (config) {
         'Array': []
     }
     for (let i in props) {
-        
+
         if (props[i].type) {
             const type = props[i].type;
             if (Array === type || type === Object) {
                 if ('default' in props[i]) {
-                    propsIns[i] = props[i].default()
+                    console.log(props[i].default())
+                    propsIns[i] = props[i].default() || {}
                 } else {
                     propsIns[i] = map[type]
                 }
@@ -234,5 +224,11 @@ export function getDefaultProps (config) {
             }
         }
     }
+    console.log(propsIns)
     return propsIns
+}
+
+export function getRawId() {
+    console.log(Math.random)
+    return parseInt(Math.random() * 1000000)
 }

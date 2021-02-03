@@ -7,21 +7,25 @@ let base = {
         }
     },
     props: {
-        on: {
-            type: Object,
-            default: () => {}
-        },
-        children: {
-            type: Array,
-            default: () => ['确定']
-        },
-        subName: {
-          type: String,
-          default: ''
-        },
-        styles: {
+      on: {
           type: Object,
           default: () => {}
+      },
+      children: {
+          type: Array,
+          default: () => ['确定']
+      },
+      subName: {
+        type: String,
+        default: ''
+      },
+      styles: {
+        type: Object,
+        default: () => {
+          return {
+            border: '1px solid #409EFF'
+          }
+        }
       },
     },
     computed: {

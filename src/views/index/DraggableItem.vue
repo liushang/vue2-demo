@@ -50,11 +50,8 @@ const layouts = {
     let className = this.activeId === config.formId ? 'drawing-item active-from-item' : 'drawing-item'
     if (this.formConf.unFocusedComponentBorder) className += ' unfocus-bordered'
     if (config.showLabel === false) labelWidth = '0'
-    console.log(currentItem)
     let configData = analysisDataRender([ currentItem ]);
     let configArr = analysisRenderConfig(configData, h); 
-    console.log('data23yhbfpoanfvioasd')
-    console.log(configArr)
     return (
       <el-col span={config.span} class={className}
         nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}>

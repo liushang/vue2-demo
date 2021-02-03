@@ -14,15 +14,28 @@ let base = {
       },
       attrs: {
           type: Object,
-          default: () => {}
+          default: () => {
+            return {
+              span: 10,
+              offset: 2
+            }
+          }
       },
       children: {
           type: Array,
           default: () => ['确定', ',']
       },
       styles: {
-          type: Object,
-          default: () => {}
+        type: Object,
+        default: () => {
+          return {
+            border: '1px solid #409EFF'
+          }
+        }
+      },
+      rawId: {
+        type: Number,
+        default: 0
       },
     },
     render,
@@ -36,12 +49,20 @@ let base = {
         return {
           children: [{
               name: 'el-col',
-              attr: this.attrs,
+              attrs: this.attrs,
               style: Object.assign(this.style, this.styles),
               ref: 'oCol',
               on: {
-                  blur: this.updateMsg,
-                //   input: this.input
+                ...this.on
+              },
+              props: {
+                rawId: this.rawId
+              },
+              nativeOn: {
+                click: () => {
+                  console.log('啊啊啊啊啊啊啊啊啊啊啊啊')
+                  this.$root.$emit('DEAL_CHOOSE', this)
+                },
               },
               children: this.children
           }]

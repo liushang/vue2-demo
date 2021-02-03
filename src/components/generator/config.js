@@ -17,55 +17,46 @@ export const formConf = {
 export const oComponents = [
   {
     name: 'oInput',
-    children: [],
     props: {
-      value: 323,
-      bb: 12
+      value: "323",
     },
     __config__: {
-      label: 'el-input',
+      label: 'o-input',
       layout: 'oFormItem',
     },
   }, {
     name: 'oButton',
-    children: [
-      '1'
-    ],
-    props: {
-      children: [
-        '1'
-      ],
-    },
+    props: {},
     __config__: {
-      label: 'el-button',
+      label: 'o-button',
       layout: 'oFormItem',
     },
   }, {
     name: 'oRow',
-    children: [
-      '1'
-    ],
-    props: {
-      children: [
-        '1'
-      ],
-    },
+    props: {},
     __config__: {
-      label: 'el-Row',
+      label: 'o-Row',
       layout: 'oFormItem',
     },
   }, {
     name: 'oCol',
-    children: [
-      '1'
-    ],
-    props: {
-      children: [
-        '1'
-      ],
-    },
+    props: {},
     __config__: {
-      label: 'el-Col',
+      label: 'o-Col',
+      layout: 'oFormItem',
+    },
+  }, {
+    name: 'oForm',
+    props: {},
+    __config__: {
+      label: 'o-Form',
+      layout: 'oFormItem',
+    },
+  }, {
+    name: 'oFormItem',
+    props: {},
+    __config__: {
+      label: 'o-FormItem',
       layout: 'oFormItem',
     },
   }
