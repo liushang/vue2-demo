@@ -12,42 +12,49 @@ export const oComponents = [
       value: "323",
     },
     __config__: {
-      label: 'o-input',
+      label: 'el-input',
       layout: 'oFormItem',
     },
   }, {
     name: 'oButton',
     props: {},
     __config__: {
-      label: 'o-button',
+      label: 'el-button',
+      layout: 'oFormItem',
+    },
+  }, {
+    name: 'oSwitch',
+    props: {},
+    __config__: {
+      label: 'el-switch',
       layout: 'oFormItem',
     },
   }, {
     name: 'oRow',
     props: {},
     __config__: {
-      label: 'o-Row',
+      label: 'el-Row',
       layout: 'oFormItem',
     },
   }, {
     name: 'oCol',
     props: {},
     __config__: {
-      label: 'o-Col',
+      label: 'el-col',
       layout: 'oFormItem',
     },
   }, {
     name: 'oForm',
     props: {},
     __config__: {
-      label: 'o-Form',
+      label: 'el-Form',
       layout: 'oFormItem',
     },
   }, {
     name: 'oFormItem',
     props: {},
     __config__: {
-      label: 'o-FormItem',
+      label: 'el-FormItem',
       layout: 'oFormItem',
     },
   }

@@ -4,7 +4,13 @@ let base = {
     data() {
         return {
           style: {
-            border: '1px solid #409EFF'
+            border: '1px solid #409EFF',
+            'min-height': '200px',
+          },
+          attr: {
+            size: 'small',
+            'label-width': '74px',
+            'min-height': '200px'
           }
         }
     },
@@ -17,9 +23,15 @@ let base = {
         type: Object,
         default: () => {
           return {
-            'label-width': '100px',
+            size: 'small',
+            'label-width': '74px',
+            'min-height': '200px'
           }
         }
+      },
+      nativeOn: {
+        type: Object,
+        default: () => {}
       },
       children: {
         type: Array,
@@ -61,12 +73,23 @@ let base = {
               name: 'el-form',
               ref: 'oForm',
               on: {
-                  blur: this.updateMsg,
-                  input: this.input
+                  click: e => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    this.$root.$emit('DEAL_CHOOSE', this)
+                },
+                ...this.on
               },
               attrs: {
                 model: this.form,
                 ...this.attrs
+              },
+              nativeOn: {
+                click: () => {
+                  console.log('啊啊啊啊啊啊啊啊啊啊啊啊')
+                  this.$root.$emit('DEAL_CHOOSE', this)
+                },
+                ...this.nativeOn
               },
               style: Object.assign(this.style, this.styles),
               props: {

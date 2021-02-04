@@ -69,10 +69,10 @@ let base = {
               rawId: this.rawId
             },
             nativeOn: {
-              click: (() => {
+              click: () => {
                 console.log('啊啊啊啊啊啊啊啊啊啊啊啊')
                 self.$root.$emit('DEAL_CHOOSE', this)
-              }).bind(this),
+              },
               ...this.nativeOn
             },
             children: this.children

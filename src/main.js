@@ -9,6 +9,7 @@ import VueCodemirror from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 import ElementUI from 'element-ui';
 import oButton from './views/OGV-form-design/components/o-buttonRender'
+import oSwitch from './views/OGV-form-design/components/o-switchRender'
 import oInput from './views/OGV-form-design/components/o-inputRender'
 import oHtml from './views/OGV-form-design/components/o-htmlRender'
 import oHtmlRender from './views/OGV-form-design/components/o-htmlRender'
@@ -36,6 +37,7 @@ Vue.component('oForm', oForm)
 Vue.component('oFormItem', oFormItem)
 Vue.component('oRow', oRowRender)
 Vue.component('oCol', oColRender)
+Vue.component('oSwitch', oSwitch)
 
 Vue.config.productionTip = false
 console.log(Vue)

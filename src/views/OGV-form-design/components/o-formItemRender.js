@@ -5,6 +5,9 @@ let base = {
         return {
           style: {
             border: '1px solid #409EFF'
+          },
+          attr: {
+            label: '123',
           }
         }
     },
@@ -26,6 +29,10 @@ let base = {
         default: () => ['确定']
       },
       styles: {
+        type: Object,
+        default: () => {}
+      },
+      nativeOn: {
         type: Object,
         default: () => {}
       },
@@ -54,8 +61,15 @@ let base = {
               },
               attrs: {
                 model: this.form,
-                // labelWidth: this.labelWidth,
                 ...this.attrs
+              },
+              nativeOn: {
+                click: e => {
+                  e.stopPropagation()
+                  console.log('啊啊啊啊啊啊啊啊啊啊啊啊')
+                  this.$root.$emit('DEAL_CHOOSE', this)
+                },
+                ...this.nativeOn
               },
               style: Object.assign(this.style, this.styles),
               props: {

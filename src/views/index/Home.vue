@@ -235,11 +235,14 @@ export default {
     this.$root.$on('DEAL_CHOOSE', (item) => {
       console.log(item)
       console.log('DEAL_CHOOSE')
-      if (this.previewItem) this.previewItem.style.border = ''
+      if (this.previewItem) this.previewItem.style.border = '1px solid #409EFF'
       this.$set(item.style, 'border', '1px solid red')
       let rawId = item.rawId
       setTimeout(() => {
-        let activeSubItem = this.getRawIdItem(this.activeData, rawId)
+        console.log(rawId)
+        let activeSubItem = this.getRawIdItem(this.drawingList, rawId)
+        console.log('我是activesubtime')
+        console.log(activeSubItem)
         if (activeSubItem) this.activeFormItem(activeSubItem)
       }, 0)
       this.previewItem = item
@@ -309,22 +312,32 @@ export default {
         if (t) t.value = val
       }
     },
-    getRawIdItem(currentItem, id) {
-      console.log(currentItem.name)
-      if (typeof currentItem !== 'object') return
-      // for(let i of currentItem) {
-        if (currentItem && currentItem.props) {
-          if (currentItem.props.rawId === id) {
-            console.log('找到了', currentItem)
-            return currentItem
-          } else {
-            if (!currentItem.props.children) return
-            for (let y of currentItem.props.children) {
-              let oo = this.getRawIdItem(y, id)
-              if (oo) return oo
-            }
+    getRawIdItem(list, id) {
+      // console.log(currentItem.name)
+      // if (typeof currentItem !== 'object') return
+      //   if (currentItem && currentItem.props) {
+      //     if (currentItem.props.rawId === id) {
+      //       console.log('找到了', currentItem)
+      //       return currentItem
+      //     } else {
+      //       if (!currentItem.props.children) return
+      //       for (let y of currentItem.props.children) {
+      //         let oo = this.getRawIdItem(y, id)
+      //         if (oo) return oo
+      //       }
+      //     }
+      // }
+      if (!Array.isArray(list)) return
+      for(const i of list) {
+        if (i.props.rawId === id) {
+          console.log('找到id', i)
+          return i
+        } else {
+          if (i.props.children) {
+            let oo = this.getRawIdItem(i.props.children, id)
+            if (oo) return oo
           }
-        // }
+        }
       }
     },
     activeFormItem(currentItem) {

@@ -1,5 +1,5 @@
 <template>
-  <div class="right-board">
+  <div class="right-board" id="right-board">
     <el-tabs v-model="currentTab" class="center-tabs">
       <el-tab-pane label="组件属性" name="field" />
       <el-tab-pane label="表单属性" name="form" />
@@ -353,7 +353,13 @@ export default {
   }
 }
 </script>
-
+<style lang="less">
+#right-board{
+  .el-form-item{
+    margin-bottom: 8px;
+  }
+}
+</style>
 <style lang="less" scoped>
 .right-board {
   width: 550px;
