@@ -8,69 +8,34 @@
       <!-- <a class="document-link" target="_blank" :href="documentLink" title="查看组件文档">
         <i class="el-icon-link" />
       </a> -->
-      <el-scrollbar class="right-scrollbar">
+      <el-scrollbar class="right-scrollbar" v-if="activeData && activeData.name">
         {{activeData.name}} ({{activeData.props.rawId}})
         <!-- 组件属性 -->
         <el-form v-show="currentTab==='field' && showField" v-if="activeData" size="small" label-width="90px">
           <div v-if="activeData.name">
-            <InfiniteObject :activeData="activeData.props" :rootWord="i" v-for="(i, index) in propertiesList" :key="index" @changeComponentPanel="changeComponentPanel"></InfiniteObject>
+            <InfiniteObject
+              :activeData="activeData.props"
+              :rootWord="i"
+              v-for="(i, index) in propertiesList"
+              :initialType="i === 'children' ? 'array' : 'string'"
+              :key="index"
+              @changeComponentPanel="changeComponentPanel"
+              :initialTypeShow="['renderFun', 'rawId', 'on', 'nativeOn'].includes(i) ? 'text' : 'input'"
+              ></InfiniteObject>
           </div>
+          <!-- <codemirror v-model="activeData.props.renderFun" :options="cmOptions" ref="cmEditor"/> -->
         </el-form>
         <!-- 表单属性 -->
         <el-form v-show="currentTab === 'form'" size="small" label-width="90px">
-          <el-form-item label="表单名">
-            <el-input v-model="formConf.formRef" placeholder="请输入表单名（ref）" />
+          <el-form-item label="表单名" v-for="(i, index) in formConf" :key="index">
+            {{i}}
+            <!-- <el-input v-model="formConf.formRef" placeholder="请输入表单名（ref）" /> -->
           </el-form-item>
-          <el-form-item label="表单模型">
-            <el-input v-model="formConf.formModel" placeholder="请输入数据模型" />
-          </el-form-item>
-          <el-form-item label="校验模型">
-            <el-input v-model="formConf.formRules" placeholder="请输入校验模型" />
-          </el-form-item>
-          <el-form-item label="表单尺寸">
-            <el-radio-group v-model="formConf.size">
-              <el-radio-button label="medium">
-                中等
-              </el-radio-button>
-              <el-radio-button label="small">
-                较小
-              </el-radio-button>
-              <el-radio-button label="mini">
-                迷你
-              </el-radio-button>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="标签对齐">
-            <el-radio-group v-model="formConf.labelPosition">
-              <el-radio-button label="left">
-                左对齐
-              </el-radio-button>
-              <el-radio-button label="right">
-                右对齐
-              </el-radio-button>
-              <el-radio-button label="top">
-                顶部对齐
-              </el-radio-button>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="标签宽度">
-            <el-input v-model.number="formConf.labelWidth" type="number" placeholder="请输入标签宽度" />
-          </el-form-item>
-          <el-form-item label="栅格间隔">
-            <el-input-number v-model="formConf.gutter" :min="0" placeholder="栅格间隔" />
-          </el-form-item>
-          <el-form-item label="禁用表单">
-            <el-switch v-model="formConf.disabled" />
-          </el-form-item>
-          <el-form-item label="表单按钮">
-            <el-switch v-model="formConf.formBtns" />
-          </el-form-item>
-          <el-form-item label="显示未选中组件边框">
-            <el-switch v-model="formConf.unFocusedComponentBorder" />
-          </el-form-item>
+          <InfiniteObject :activeData="formConf" rootWord="basicData" initialType="array" @changeComponentPanel="changeComponentPanel"></InfiniteObject>
         </el-form>
       </el-scrollbar>
     </div>
+    <codeEditor :dataStr="renderCode" v-if="activeData && activeData.props && activeData.props.renderFun && showFunctionDialog" :options="cmOptions" @close="changeFuncCode" ref="cmEditor"/>
     <treeNode-dialog :visible.sync="dialogVisible" title="添加选项" @commit="addNode" />
   </div>
 </template>
@@ -84,9 +49,14 @@ import {
   inputComponents, selectComponents, layoutComponents
 } from '@/components/generator/config'
 import InfiniteObject from './components/infiniteObject.js'
-// import ComponentConfigDetail from './components/infiniteObject.js'
+import CodeEditor from '../OGV-form-design/components/code-editor'
 import { saveFormConf } from '@/utils/db'
-
+import 'codemirror/mode/javascript/javascript.js'
+import {
+  stringToFunc
+} from '@/utils/db'
+// import theme style
+import 'codemirror/theme/base16-dark.css'
 const dateTimeFormat = {
   date: 'yyyy-MM-dd',
   week: 'yyyy 第 WW 周',
@@ -105,101 +75,23 @@ export default {
   components: {
     TreeNodeDialog,
     InfiniteObject,
+    CodeEditor,
     // ComponentConfigDetail
     // IconsDialog
   },
   props: ['showField', 'activeData', 'formConf'],
   mounted() {
-    console.log('activeData')
     console.log(this.activeData)
   },
   data() {
     return {
+      // 展示弹窗
+      showFunctionDialog: false,
       currentTab: 'field',
       currentNode: null,
       dialogVisible: false,
       iconsVisible: false,
       currentIconModel: null,
-      dateTypeOptions: [
-        {
-          label: '日(date)',
-          value: 'date'
-        },
-        {
-          label: '周(week)',
-          value: 'week'
-        },
-        {
-          label: '月(month)',
-          value: 'month'
-        },
-        {
-          label: '年(year)',
-          value: 'year'
-        },
-        {
-          label: '日期时间(datetime)',
-          value: 'datetime'
-        }
-      ],
-      dateRangeTypeOptions: [
-        {
-          label: '日期范围(daterange)',
-          value: 'daterange'
-        },
-        {
-          label: '月范围(monthrange)',
-          value: 'monthrange'
-        },
-        {
-          label: '日期时间范围(datetimerange)',
-          value: 'datetimerange'
-        }
-      ],
-      colorFormatOptions: [
-        {
-          label: 'hex',
-          value: 'hex'
-        },
-        {
-          label: 'rgb',
-          value: 'rgb'
-        },
-        {
-          label: 'rgba',
-          value: 'rgba'
-        },
-        {
-          label: 'hsv',
-          value: 'hsv'
-        },
-        {
-          label: 'hsl',
-          value: 'hsl'
-        }
-      ],
-      justifyOptions: [
-        {
-          label: 'start',
-          value: 'start'
-        },
-        {
-          label: 'end',
-          value: 'end'
-        },
-        {
-          label: 'center',
-          value: 'center'
-        },
-        {
-          label: 'space-around',
-          value: 'space-around'
-        },
-        {
-          label: 'space-between',
-          value: 'space-between'
-        }
-      ],
       // 修改item
       modifyItem: {},
       options: [{
@@ -218,59 +110,31 @@ export default {
         value: '5',
         label: '数组'
       }],
+      cmOptions: {
+        tabSize: 4,
+        mode: 'text/javascript',
+        theme: 'base16-dark',
+        lineNumbers: true,
+        line: true,
+        // more CodeMirror options...
+      },
+      tempCodeArr: []
     }
   },
   computed: {
+    renderCode() {
+      const [ data, property, subProperty ] = this.tempCodeArr
+      if (data[property][subProperty]) {
+        return data[property][subProperty].toString()
+      } else {
+        return data[property].toString()
+      }
+    },
     propertiesList() {
       return Object.keys(this.activeData.props)
     },
-    propsList() {
-      let list = []
-      for (const i in this.activeData.props) {
-        list.push(i)
-      }
-      return list
-    },
-    documentLink() {
-      return (
-        'https://element.eleme.cn/#/zh-CN/component/installation'
-      )
-    },
-    dateOptions() {
-      if (
-        this.activeData.type !== undefined
-        && this.activeData.__config__.tag === 'el-date-picker'
-      ) {
-        if (this.activeData['start-placeholder'] === undefined) {
-          return this.dateTypeOptions
-        }
-        return this.dateRangeTypeOptions
-      }
-      return []
-    },
-    tagList() {
-      return [
-        {
-          label: '输入型组件',
-          options: inputComponents
-        },
-        {
-          label: '选择型组件',
-          options: selectComponents
-        }
-      ]
-    },
-    activeTag() {
-      return this.activeData.__config__.tag
-    },
-    isShowMin() {
-      return ['el-input-number', 'el-slider'].indexOf(this.activeTag) > -1
-    },
-    isShowMax() {
-      return ['el-input-number', 'el-slider', 'el-rate'].indexOf(this.activeTag) > -1
-    },
-    isShowStep() {
-      return ['el-input-number', 'el-slider'].indexOf(this.activeTag) > -1
+    codemirror() {
+      return this.$refs.cmEditor.codemirror
     }
   },
   watch: {
@@ -282,9 +146,35 @@ export default {
     }
   },
   methods: {
+    changeFuncCode(code) {
+      console.log('changeFuncCode')
+      this.showFunctionDialog = false
+      this.$emit('renderAgain')
+      console.log(data, property, subProperty)
+      const [ data, property, subProperty ] = this.tempCodeArr
+      if (data[property][subProperty]) {
+        data[property][subProperty] = stringToFunc(code)
+      } else {
+        data[property] = stringToFunc(code)
+      }
+      // this.activeData.props.renderFunStr = code
+      // this.activeData.props.renderFun = stringToFunc(code)
+    },
+    addData() {
+      console.log('addData')
+    },
+    delData() {
+      console.log('delData')
+    },
     // 向上传递改变组件面板内容
     changeComponentPanel(data, property, subProperty) {
-      this.$emit('panelContent', data, property, subProperty)
+      console.log(property, subProperty)
+      if (property === 'renderFun' || property === 'on' || property === 'nativeOn') {
+        this.tempCodeArr = [data, property, subProperty]
+        this.showFunctionDialog = true
+      } else {
+        this.$emit('panelContent', data, property, subProperty)
+      }
     },
     getList(key, data = this.activeData) {
       let list = []
@@ -418,9 +308,6 @@ export default {
       this.$set(this.activeData.__config__, 'defaultValue', null)
       this.$set(this.activeData, 'value-format', valueFormat)
       this.$set(this.activeData, 'format', val)
-    },
-    spanChange(val) {
-      this.formConf.span = val
     },
     multipleChange(val) {
       this.$set(this.activeData.__config__, 'defaultValue', val ? [] : '')

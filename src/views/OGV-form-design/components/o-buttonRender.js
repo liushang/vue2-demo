@@ -4,6 +4,7 @@ let base = {
     data() {
         return {
             style: {
+                border: '1px solid yellow'
             }
         }
     },
@@ -23,11 +24,13 @@ let base = {
         styles: {
           type: Object,
           default: () => {
-            return {
-              border: '1px solid #409EFF'
-            }
+            return {}
           }
         },
+        renderFun: {
+            type: Function,
+            default: x => x
+          },
         rawId: {
             type: Number,
             default: 0
@@ -37,7 +40,7 @@ let base = {
         ...computed,
         configComponents() {
             return {
-              children: [{
+              children: this.renderFun([{
                   name: 'el-button',
                   style: Object.assign(this.style, this.styles),
                   attrs: Object.assign({
@@ -50,8 +53,6 @@ let base = {
                       click: e => {
                           e.preventDefault()
                           e.stopPropagation()
-                          console.log('啊啊啊啊啊啊啊啊啊啊按钮')
-                          console.log(this)
                           this.$root.$emit('DEAL_CHOOSE', this)
                       },
                       ...this.on
@@ -66,7 +67,7 @@ let base = {
                     // },
                   },
                   children: this.children
-              }]
+              }])
             }
         },
     },

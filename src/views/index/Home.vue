@@ -49,6 +49,7 @@
             <draggable class="drawing-board" :list="drawingList" :animation="340" group="componentsGroup">
               <draggable-item
                 v-for="(item, index) in drawingList"
+                v-if="showNew"
                 :key="item.renderKey"
                 :drawing-list="drawingList"
                 :current-item="item"
@@ -71,6 +72,7 @@
       :active-data="activeData"
       :form-conf="formConf"
       :show-field="!!drawingList.length"
+      @renderAgain="renderAgain"
       @tag-change="tagChange"
       @panelContent="panelContent"
       @fetch-data="fetchData"
@@ -136,6 +138,8 @@ export default {
   },
   data() {
     return {
+      // 重新展示
+      showNew: true,
       logo,
       idGlobal,
       formConf,
@@ -231,12 +235,10 @@ export default {
     this.$root.$on('DEAL_CHOOSE', (item) => {
       console.log(item)
       console.log('DEAL_CHOOSE')
-      console.log(item.$parent.$parent.$parent)
       if (this.previewItem) this.previewItem.style.border = ''
       this.$set(item.style, 'border', '1px solid red')
       let rawId = item.rawId
       setTimeout(() => {
-        console.log(rawId)
         let activeSubItem = this.getRawIdItem(this.activeData, rawId)
         if (activeSubItem) this.activeFormItem(activeSubItem)
       }, 0)
@@ -245,6 +247,9 @@ export default {
   },
   
   methods: {
+    renderAgain() {
+      console.log('重新渲染')
+    },
     panelContent(data, property, subProperty) {
       this.dialogComponentDetail = {
         data, property, subProperty
@@ -325,11 +330,13 @@ export default {
     activeFormItem(currentItem) {
       const comOptions = getDefaultProps(this.$root.$options.components[currentItem.name].options)
       for(let i in comOptions) {
+        console.log(comOptions[i])
         if (!currentItem.props[i]) this.$set(currentItem.props, i, comOptions[i])
         // this.$set(currentItem.props.attrs, i, comOptions[i])
       }
       if (!currentItem.props.rawId) currentItem.props.rawId = getRawId()
       console.log('activeFormItem', currentItem)
+      // this.$set(currentItem.props.attrs, 'border', '1px solid red')
       this.activeData = currentItem
       // this.activeId = currentItem.__config__.formId
     },
@@ -373,12 +380,6 @@ export default {
         config.children = config.children.map(childItem => this.createIdAndKey(childItem))
       }
       return item
-    },
-    AssembleFormData() {
-      this.formData = {
-        fields: deepClone(this.drawingList),
-        ...this.formConf
-      }
     },
     drawingItemCopy(item, list) {
       let clone = deepClone(item)

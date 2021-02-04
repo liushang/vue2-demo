@@ -3,7 +3,10 @@ import { render, computed } from '../../../schema/api';
 let base = {
     data() {
         return {
-            style: {}
+            style: {
+                border: '1px solid #409EFF',
+                'min-height': '40px'
+            }
         }
     },
     props: {
@@ -50,6 +53,12 @@ let base = {
               on: {
                 click: this.click,
                   ...this.on
+              },
+              nativeOn: {
+                click: () => {
+                  console.log('啊啊啊啊啊啊啊啊啊啊啊啊')
+                  this.$root.$emit('DEAL_CHOOSE', this)
+                },
               },
               children: this.children
           }]

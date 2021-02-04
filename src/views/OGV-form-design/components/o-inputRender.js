@@ -4,7 +4,9 @@ let base = {
     data() {
         return {
             val: '',
-            style: {}
+            style: {
+              border: '1px solid #409EFF'
+            }
         }
     },
     props: {
@@ -28,7 +30,6 @@ let base = {
         type: Object,
         default: () => {
           return {
-            border: '1px solid #409EFF'
           }
         }
       },

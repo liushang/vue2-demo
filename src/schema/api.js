@@ -15,5 +15,15 @@ export const computed = {
 export function render(h) {
   // this.configData = analysisDataRender(this.configComponents.children);
   let configArr = analysisRenderConfig(this.configData, h); 
-  return configArr[0]
+  console.log(configArr)
+  if (configArr.length > 1) {
+    return h(
+      'div',
+      null,
+      configArr
+    )
+  } else {
+    return configArr[0]
+  }
+  
 }

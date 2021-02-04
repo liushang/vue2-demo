@@ -205,11 +205,17 @@ export function getDefaultProps (config) {
         'String': '',
         'Boolean': false,
         'Object': {},
-        'Function': () => {},
+        'function': () => {},
         'Array': []
     }
+    const dealMap = {
+        'Number': e => +e,
+        'String': e => e,
+        'Boolean': e => !!e,
+        'function': e => e,
+        'Array': e => e
+    }
     for (let i in props) {
-
         if (props[i].type) {
             const type = props[i].type;
             if (Array === type || type === Object) {
@@ -220,7 +226,14 @@ export function getDefaultProps (config) {
                     propsIns[i] = map[type]
                 }
             } else {
-                propsIns[i] = 'default' in props[i] ? props[i].default : map[type]
+                console.log(type)
+                console.log(typeof type)
+                console.log(props[i])
+                propsIns[i] = 'default' in props[i] ? dealMap[typeof type](props[i].default) : map[type]
+                if (('renderFun' in propsIns)) {
+                    propsIns.renderFunStr = dealMap['function'].toString()
+                }
+                console.log(props[i])
             }
         }
     }

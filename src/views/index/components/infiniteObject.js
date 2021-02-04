@@ -1,4 +1,7 @@
 import { getDefaultProps, getRawId } from '../../../schema/util'
+import {
+  stringToFunc
+} from '@/utils/db'
 import Vue from 'vue'
 export default {
     data() {
@@ -85,6 +88,14 @@ export default {
         rootWord: {
             type: String,
             default: 'props'
+        },
+        initialTypeShow: {
+          type: String,
+          default: 'input'
+        },
+        initialType: {
+          type: String,
+          default: 'object'
         }
     },
     render() {
@@ -93,11 +104,14 @@ export default {
         const rootWord = this.rootWord
         return (<el-form-item label={this.rootWord}>
         {propertyList.map(x => {
-            return (<el-form-item label={['string', 'number', 'boolean'].includes(typeof this.activeData[rootWord]) ? '' : x} label-width="82px">
-              {['string', 'number', 'boolean'].includes(typeof this.activeData[rootWord]) ? <el-input v-model={this.activeData[rootWord]} placeholder="请输入字段名（v-model）s"  style="width: 165px"/> :
+            return (<el-form-item label={['string', 'number', 'boolean', 'function'].includes(typeof this.activeData[rootWord]) ? '' : x} label-width="82px">
+              {['string', 'number', 'boolean'].includes(typeof this.activeData[rootWord]) && this.initialTypeShow === 'input' ? <el-input v-model={this.activeData[rootWord]} placeholder="请输入字段名（v-model）s"  style="width: 165px"/> :
                 ['array', 'object'].includes(typeof this.activeData[rootWord][x]) ?
                 <span onClick={() => this.analysisProperty(this.activeData, rootWord, x)}>{this.activeData[rootWord][x].name}</span> :
-                <el-input v-model={this.activeData[rootWord][x]} placeholder="请输入字段名（v-model）s"  style="width: 165px"/>}
+                this.initialTypeShow === 'input' ?
+                <el-input v-model={this.activeData[rootWord][x]} placeholder="请输入字段名（v-model）s"  style="width: 165px"/>:
+                <span onClick={() => this.analysisProperty(this.activeData, rootWord, x)}>{this.activeData[rootWord][x] ? this.activeData[rootWord][x].toString(): this.activeData[rootWord].toString()}</span>  
+                }
               {
                 ['string', 'number', 'boolean'].includes(typeof this.activeData[rootWord]) ? '' :
                 <i class="el-icon-error" onClick={() => this.delKey(x, rootWord)} style="margin-left: 5px;color: #409EFF"/>
@@ -109,7 +123,7 @@ export default {
         </el-form-item>
         {
           // 简单属性不可新增和取消
-          ['string', 'number', 'boolean'].includes(typeof this.activeData[rootWord]) ? ''
+          ['string', 'number', 'boolean', 'function'].includes(typeof this.activeData[rootWord]) ? ''
           :
           <div>
           <el-button onClick={() => !modifyItem[rootWord] ? this.addProperty(modifyItem, rootWord, null, 'rootWord') : this.saveProperty(rootWord)}>{!modifyItem[rootWord] ? '新建' : '保存'}</el-button> <el-button onClick={() => this.delModifyItem(modifyItem, rootWord)}>取消</el-button>
@@ -163,7 +177,7 @@ export default {
           if (type === '4') {
             this.$set(data, key, {
               // children做特殊处理
-              key: rootName && this.rootWord === 'children' ? this.activeData.children.length || 0 : '',
+              key: rootName && this.initialType === 'array' ? this.activeData[this.rootWord].length || 0 : '',
               type: '1',
               value: ''
             })
@@ -185,6 +199,7 @@ export default {
         },
         saveProperty(key, data = this.activeData) {
           if (!(key in data)) this.$set(data, key, {})
+          console.log('saveProperty')
           if (this.modifyItem[key].type !== '4' && this.modifyItem[key].type !== '5') {
             // 如果输入的是组件。则增加此组件的相关配置
             // console.log(this.$root.$options.components.oCol.options.props)
@@ -200,7 +215,11 @@ export default {
               this.$set(this.activeData[key], this.modifyItem[key].key, config)
             } else {
               // 简单属性直接保存
-              this.$set(this.activeData[key], this.modifyItem[key].key, this.modifyItem[key].value )
+              let value = this.modifyItem[key].value
+              if (key === 'on' || key === 'nativeOn') {
+                value = stringToFunc(this.modifyItem[key].value)
+              }
+              this.$set(this.activeData[key], this.modifyItem[key].key, value )
             }
           } else {
             // 复杂属性需要转换key、value变为对象
@@ -250,21 +269,15 @@ export default {
                     this.$delete(data, key)
                 // }
             }
-
         },
         delKey(key, property) {
           this.$delete(this.activeData[property], key)
         },
-        // addSubComponent(e) {
-        //   console.log(e)
-        //   e.value = {
-        //     // name: 
-        //   }
-        // },
         analysisProperty(data, property, subProperty) {
+          console.log(data, property, subProperty)
           const x = data[property][subProperty]
-          // 如果是组件。则跳到相应组件编辑弹窗
-          if (x.name) {
+          // 如果是函数/组件。则跳到相应组件编辑弹窗
+          if (['renderFun', 'on', 'nativeOn'].includes(property) || x && x.name) {
             this.$emit('changeComponentPanel', data, property, subProperty)
             // this.$on('changeComponentPanel',)
           }

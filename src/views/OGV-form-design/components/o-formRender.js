@@ -3,7 +3,9 @@ import { render, computed } from '../../../schema/api';
 let base = {
     data() {
         return {
-          style: {}
+          style: {
+            border: '1px solid #409EFF'
+          }
         }
     },
     props: {
@@ -27,7 +29,6 @@ let base = {
         type: Object,
         default: () => {
           return {
-            border: '1px solid #409EFF'
           }
         }
       },

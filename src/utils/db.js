@@ -15,8 +15,43 @@ export function getDrawingList() {
   }
 
   const str = localStorage.getItem(DRAWING_ITEMS)
-  if (str) return JSON.parse(str)
+  if (str) return propertyStringToFunc(JSON.parse(str))
   return null
+}
+
+export function propertyStringToFunc(str) {
+  for(let i of str) {
+    if (i.props && (i.props.renderFunStr)) {
+      let funStr = i.props.renderFunStr || i.props.renderFun
+      // 获取函数体
+      let funLast = funStr.slice(funStr.indexOf('{') + 1)
+      let funMiddle = funLast.slice(0, funLast.lastIndexOf('}'))
+      // 获取函数参数
+      let funPre = funStr.slice(funStr.indexOf('(') + 1)
+      let funNamePre = funPre.slice(0, funPre.indexOf(')'))
+      let funNameArr = funNamePre.split(',')
+      i.props.renderFunStr = i.props.renderFun
+      i.props.renderFun = new Function(...funNameArr, funMiddle);
+    }
+    if (i.children) {
+      for (let y of i.children) {
+        propertyStringToFunc(y)
+      }
+    }
+  }
+  return str
+}
+
+export function stringToFunc(str) {
+  let funStr = str
+  // 获取函数体
+  let funLast = funStr.slice(funStr.indexOf('{') + 1)
+  let funMiddle = funLast.slice(0, funLast.lastIndexOf('}'))
+  // 获取函数参数
+  let funPre = funStr.slice(funStr.indexOf('(') + 1)
+  let funNamePre = funPre.slice(0, funPre.indexOf(')'))
+  let funNameArr = funNamePre.split(',')
+  return new Function(...funNameArr, funMiddle);
 }
 
 export function saveDrawingList(list) {
