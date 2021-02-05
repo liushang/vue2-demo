@@ -22,6 +22,10 @@ import oTimePickerRender from './views/OGV-form-design/components/o-timePickerRe
 import oDatePickerRender from './views/OGV-form-design/components/o-datePickerRender'
 import oSelectRender from './views/OGV-form-design/components/o-selectRender'
 import oOptionRender from './views/OGV-form-design/components/o-optionRender'
+import oCheckboxRender from './views/OGV-form-design/components/o-checkboxRender'
+import oRadioGroupRender from './views/OGV-form-design/components/o-radioGroupRender'
+import oRadioRender from './views/OGV-form-design/components/o-radioRender'
+
 import 'element-ui/lib/theme-chalk/index.css';
 import Tinymce from '@/components/tinymce/index.vue'
 Vue.use(VueCodemirror, /* {
@@ -45,6 +49,9 @@ Vue.component('oTimePicker', oTimePickerRender)
 Vue.component('oDatePicker', oDatePickerRender)
 Vue.component('oSelect', oSelectRender)
 Vue.component('oOption', oOptionRender)
+Vue.component('oCheckbox', oCheckboxRender)
+Vue.component('oRadioGroup', oRadioGroupRender)
+Vue.component('oRadio', oRadioRender)
 
 
 

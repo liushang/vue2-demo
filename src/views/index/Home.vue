@@ -122,9 +122,6 @@ const drawingListInDB = getDrawingList()
 console.log('drawingListInDB', drawingListInDB)
 const formConfInDB = getFormConf()
 const idGlobal = getIdGlobal()
-// const globalProperties = {
-//   children: 
-// }
 export default {
   components: {
     draggable,
@@ -261,7 +258,6 @@ export default {
     },
     closePanelDialog(e) {
       const { property, subProperty } = this.dialogComponentDetail
-      // this.activeData.props[property][subProperty] = e
       this.$set(this.activeData.props[property], subProperty, e)
       this.showPanel = false
     },
@@ -313,27 +309,13 @@ export default {
       }
     },
     getRawIdItem(list, id) {
-      // console.log(currentItem.name)
-      // if (typeof currentItem !== 'object') return
-      //   if (currentItem && currentItem.props) {
-      //     if (currentItem.props.rawId === id) {
-      //       console.log('找到了', currentItem)
-      //       return currentItem
-      //     } else {
-      //       if (!currentItem.props.children) return
-      //       for (let y of currentItem.props.children) {
-      //         let oo = this.getRawIdItem(y, id)
-      //         if (oo) return oo
-      //       }
-      //     }
-      // }
       if (!Array.isArray(list)) return
       for(const i of list) {
-        if (i.props.rawId === id) {
+        if (i.props && i.props.rawId === id) {
           console.log('找到id', i)
           return i
         } else {
-          if (i.props.children) {
+          if (i.props && i.props.children) {
             let oo = this.getRawIdItem(i.props.children, id)
             if (oo) return oo
           }

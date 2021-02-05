@@ -79,6 +79,27 @@ export const oComponents = [
       layout: 'oFormItem',
     },
   }, {
+    name: 'oCheckbox',
+    props: {},
+    __config__: {
+      label: 'el-checkbox',
+      layout: 'oFormItem',
+    },
+  }, {
+    name: 'oRadioGroup',
+    props: {},
+    __config__: {
+      label: 'el-radioGroup',
+      layout: 'oFormItem',
+    },
+  }, {
+    name: 'oRadio',
+    props: {},
+    __config__: {
+      label: 'el-radio',
+      layout: 'oFormItem',
+    },
+  }, {
     name: 'oFormItem',
     props: {},
     __config__: {

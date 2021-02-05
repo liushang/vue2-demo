@@ -3,7 +3,7 @@ import { render, computed } from '../../../schema/api';
 let base = {
     data() {
         return {
-            val: '',
+            val: '我是label',
             style: {
               border: '1px solid #409EFF'
             }
@@ -26,17 +26,29 @@ let base = {
         type: String,
         default: ''
       },
+      attrs: {
+        type: Object,
+        default: () => {
+          return {}
+        }
+      },
+      on: {
+        type: Object,
+        default: () => {}
+      },
+      nativeOn: {
+        type: Object,
+        default: () => {}
+      },
+      renderFun: {
+        type: Function,
+        default: x => x
+      },
       styles: {
         type: Object,
         default: () => {
           return {
           }
-        }
-      },
-      attrs: {
-        type: Object,
-        default: () => {
-
         }
       },
       rawId: {
@@ -56,12 +68,20 @@ let base = {
         },
         input(event) {
           console.log(event)
-          this.$emit('oInput', event)
+          this.$emit('oOppption', event)
           // this.configComponents.children[0].props.value = event
           // this.form[this.keyword] = event
-          console.log('oInput')
+          console.log('oOppption')
           this.form[this.keyword] = this.val = event
           console.log(this.form)
+          this.$root.$emit('DEAL_CHOOSE', this)
+        },
+        click(event) {
+          // this.configComponents.children[0].props.value = event
+          // this.form[this.keyword] = event
+          this.form[this.keyword] = this.val = event
+          console.log(this.form)
+          this.$emit('changeVal', event)
           this.$root.$emit('DEAL_CHOOSE', this)
         }
     },
@@ -69,7 +89,7 @@ let base = {
       ...computed,
       configComponents() {
         return {
-          children: [{
+          children: this.renderFun([{
             // 为了展示边框选中态特意加的
             name: 'span',
             on: {
@@ -81,24 +101,34 @@ let base = {
                 },
             },
             children: [{
-              name: 'el-input',
+              name: 'el-radio',
               attrs: Object.assign({
                   size: 'small',
               }, this.attrs),
               style: Object.assign(this.style, this.styles),
-              ref: 'oInput',
+              ref: 'oRadio',
               on: {
                   blur: this.updateMsg,
                   input: this.input,
+                  click: this.click,
                   focus: () => {
                   },
+              },
+              nativeOn: {
+                click: () => {
+                  console.log('啊啊啊啊啊啊啊啊啊啊啊啊option')
+                  this.$parent.$parent.$parent.value = this.val
+                  console.log(this.$parent.$parent.$parent)
+                  this.$emit('changeVal', this.val)
+                  this.$root.$emit('DEAL_CHOOSE', this)
+                },
               },
               props: {
                 value: this.val,
                 rawId: this.rawId
               },
             }]
-        }]
+          }])
         }
       },
     },

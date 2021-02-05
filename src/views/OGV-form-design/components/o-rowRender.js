@@ -39,29 +39,36 @@ let base = {
         },
         click() {
           console.log('啊啊啊啊啊啊啊啊啊啊啊啊')
+          this.$root.$emit('DEAL_CHOOSE', this)
         },
     },
     computed: {
       ...computed,
       configComponents() {
         return {
-          children: [{
-              name: 'el-row',
-              attr: this.attrs,
-              style: Object.assign(this.style, this.styles),
-              ref: 'oRow',
-              on: {
-                click: this.click,
-                  ...this.on
-              },
-              nativeOn: {
-                click: () => {
-                  console.log('啊啊啊啊啊啊啊啊啊啊啊啊')
-                  this.$root.$emit('DEAL_CHOOSE', this)
+            children: [{
+                // 为了展示边框选中态特意加的
+                name: 'span',
+                on: {
+                    click: e => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      console.log('啊啊啊啊啊啊啊啊啊啊我是div')
+                      this.$root.$emit('DEAL_CHOOSE', this)
+                    },
                 },
-              },
-              children: this.children
-          }]
+                children: [{
+                    name: 'el-row',
+                    attr: this.attrs,
+                    style: Object.assign(this.style, this.styles),
+                    ref: 'oRow',
+                    on: {
+                      click: this.click,
+                        ...this.on
+                    },
+                    children: this.children
+                }]
+            }]
         }
       },
     },

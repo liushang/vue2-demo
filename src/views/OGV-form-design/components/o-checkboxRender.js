@@ -35,13 +35,15 @@ let base = {
       },
       attrs: {
         type: Object,
-        default: () => {
-
-        }
+        default: () => {}
       },
       rawId: {
         type: Number,
         default: 0
+      },
+      children: {
+        type: Array,
+        default: () => ['确定']
       },
     },
     render,
@@ -50,19 +52,12 @@ let base = {
             console.log('updateMsg');
             console.log(this.configData)
         },
-        change() {
-            console.log('我是change');
-            console.log(this.configData);
-        },
-        input(event) {
-          console.log(event)
-          this.$emit('oInput', event)
-          // this.configComponents.children[0].props.value = event
-          // this.form[this.keyword] = event
-          console.log('oInput')
-          this.form[this.keyword] = this.val = event
-          console.log(this.form)
-          this.$root.$emit('DEAL_CHOOSE', this)
+        change(event) {
+            // this.$emit('oInput', event)
+            console.log('我是switch')
+            console.log(event)
+            this.form[this.keyword] = this.val = event
+            this.$root.$emit('DEAL_CHOOSE', this)
         }
     },
     computed: {
@@ -70,8 +65,9 @@ let base = {
       configComponents() {
         return {
           children: [{
-            // 为了展示边框选中态特意加的
+              // 为了展示边框选中态特意加的
             name: 'span',
+            attr: this.attrs,
             on: {
                 click: e => {
                   e.preventDefault()
@@ -81,22 +77,20 @@ let base = {
                 },
             },
             children: [{
-              name: 'el-input',
+              name: 'el-checkbox',
               attrs: Object.assign({
                   size: 'small',
               }, this.attrs),
               style: Object.assign(this.style, this.styles),
-              ref: 'oInput',
+              ref: 'oCheckbox',
               on: {
-                  blur: this.updateMsg,
-                  input: this.input,
-                  focus: () => {
-                  },
+                  change: this.change
               },
               props: {
                 value: this.val,
                 rawId: this.rawId
               },
+              children: this.children
             }]
         }]
         }
