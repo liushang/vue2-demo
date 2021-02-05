@@ -51,6 +51,34 @@ export const oComponents = [
       layout: 'oFormItem',
     },
   }, {
+    name: 'oDatePicker',
+    props: {},
+    __config__: {
+      label: 'el-DatePicker',
+      layout: 'oFormItem',
+    },
+  }, {
+    name: 'oTimePicker',
+    props: {},
+    __config__: {
+      label: 'el-TimePicker',
+      layout: 'oFormItem',
+    },
+  }, {
+    name: 'oSelect',
+    props: {},
+    __config__: {
+      label: 'el-select',
+      layout: 'oFormItem',
+    },
+  }, {
+    name: 'oOption',
+    props: {},
+    __config__: {
+      label: 'el-Option',
+      layout: 'oFormItem',
+    },
+  }, {
     name: 'oFormItem',
     props: {},
     __config__: {

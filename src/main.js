@@ -18,7 +18,10 @@ import oForm from './views/OGV-form-design/components/o-formRender'
 import oFormItem from './views/OGV-form-design/components/o-formItemRender'
 import oRowRender from './views/OGV-form-design/components/o-rowRender'
 import oColRender from './views/OGV-form-design/components/o-colRender'
-
+import oTimePickerRender from './views/OGV-form-design/components/o-timePickerRender'
+import oDatePickerRender from './views/OGV-form-design/components/o-datePickerRender'
+import oSelectRender from './views/OGV-form-design/components/o-selectRender'
+import oOptionRender from './views/OGV-form-design/components/o-optionRender'
 import 'element-ui/lib/theme-chalk/index.css';
 import Tinymce from '@/components/tinymce/index.vue'
 Vue.use(VueCodemirror, /* {
@@ -38,6 +41,12 @@ Vue.component('oFormItem', oFormItem)
 Vue.component('oRow', oRowRender)
 Vue.component('oCol', oColRender)
 Vue.component('oSwitch', oSwitch)
+Vue.component('oTimePicker', oTimePickerRender)
+Vue.component('oDatePicker', oDatePickerRender)
+Vue.component('oSelect', oSelectRender)
+Vue.component('oOption', oOptionRender)
+
+
 
 Vue.config.productionTip = false
 console.log(Vue)
