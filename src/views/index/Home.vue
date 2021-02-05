@@ -263,7 +263,7 @@ export default {
     },
     convertConstrutor(e) {
       let json = this.activeData.props[e.property][e.subProperty]
-      !json.props && (json.props = {
+      !json.props && json.name && (json.props = {
           attrs: {},
           children: [],
         })

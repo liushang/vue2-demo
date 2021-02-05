@@ -37,6 +37,10 @@ let base = {
         type: Array,
         default: () => []
       },
+      renderFun: {
+        type: Function,
+        default: x => x
+      },
       styles: {
         type: Object,
         default: () => {
@@ -65,11 +69,15 @@ let base = {
           console.log(e)
         }
     },
+    provide: {
+      colInject: [3123, 123,12312]
+    },
+    inject: ['oformInject'],
     computed: {
       ...computed,
       configComponents() {
         return {
-          children: [{
+          children: this.renderFun([{
               name: 'el-form',
               ref: 'oForm',
               on: {
@@ -97,7 +105,7 @@ let base = {
                 rawId: this.rawId
               },
               children: this.children
-          }]
+          }])
         }
       },
     },

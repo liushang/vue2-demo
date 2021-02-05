@@ -43,6 +43,7 @@ export default {
                             {this.getValue(e, 'value')}
                         </el-form-item>
                         {e.value.hasOwnProperty('key') ? <el-button onClick={() => this.delModifyItem(e, 'value')}>取消</el-button> : <el-button onClick={() => this.addProperty(e, 'value', '4')}>新建</el-button>}
+                        {/* <el-button onClick={() => this.addProperty(e, 'value', '4')}>新建</el-button> */}
                         {/* {this.rootWord === 'children' ? <el-button onClick={() => this.addSubComponent(e, 'value')}>添加子组件</el-button> : ''} */}
                     </el-form-item>
                 ),
@@ -107,7 +108,7 @@ export default {
             return (<el-form-item label={['string', 'number', 'boolean', 'function'].includes(typeof this.activeData[rootWord]) ? '' : x} label-width="82px">
               {['string', 'number', 'boolean'].includes(typeof this.activeData[rootWord]) && this.initialTypeShow === 'input' ? <el-input v-model={this.activeData[rootWord]} placeholder="请输入字段名（v-model）s"  style="width: 165px"/> :
                 ['array', 'object'].includes(typeof this.activeData[rootWord][x]) ?
-                <span onClick={() => this.analysisProperty(this.activeData, rootWord, x)}>{this.activeData[rootWord][x].name}</span> :
+                <span onClick={() => this.analysisProperty(this.activeData, rootWord, x)}>{this.activeData[rootWord][x].name || JSON.stringify(this.activeData[rootWord][x])}</span> :
                 this.initialTypeShow === 'input' ?
                 <el-input v-model={this.activeData[rootWord][x]} placeholder="请输入字段名（v-model）s"  style="width: 165px"/>:
                 <span onClick={() => this.analysisProperty(this.activeData, rootWord, x)}>{this.activeData[rootWord][x] ? this.activeData[rootWord][x].toString(): this.activeData[rootWord].toString()}</span>  
@@ -173,8 +174,10 @@ export default {
             data[key].value = e === '5' ? [] : this.valueTypeInitial[e]
         },
         addProperty(data, key, type, rootName) {
+          console.log('addproperty')
           if (!type) type = typeof this.activeData[key] === 'object' ? '4' : Array.isArray(this.activeData[key]) ? '5' : '1'
           if (type === '4') {
+            // 对象
             this.$set(data, key, {
               // children做特殊处理
               key: rootName && this.initialType === 'array' ? this.activeData[this.rootWord].length || 0 : '',
@@ -276,11 +279,9 @@ export default {
         analysisProperty(data, property, subProperty) {
           console.log(data, property, subProperty)
           const x = data[property][subProperty]
-          // 如果是函数/组件。则跳到相应组件编辑弹窗
-          if (['renderFun', 'on', 'nativeOn'].includes(property) || x && x.name) {
+          // if (['renderFun', 'on', 'nativeOn'].includes(property) || x && x.name) {
             this.$emit('changeComponentPanel', data, property, subProperty)
-            // this.$on('changeComponentPanel',)
-          }
+          // }
         }
     }
 }

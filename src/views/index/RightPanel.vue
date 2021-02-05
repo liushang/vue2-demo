@@ -170,9 +170,11 @@ export default {
     changeComponentPanel(data, property, subProperty) {
       console.log(property, subProperty)
       if (property === 'renderFun' || property === 'on' || property === 'nativeOn') {
+        // 函数编辑窗
         this.tempCodeArr = [data, property, subProperty]
         this.showFunctionDialog = true
-      } else {
+      } else { 
+        // json编辑窗
         this.$emit('panelContent', data, property, subProperty)
       }
     },

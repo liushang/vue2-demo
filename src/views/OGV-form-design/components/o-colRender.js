@@ -48,6 +48,7 @@ let base = {
       },
     },
     render,
+    inject: ['colInject'],
     methods: {
         updateMsg() {
         },
@@ -69,19 +70,21 @@ let base = {
               rawId: this.rawId
             },
             nativeOn: {
-              click: () => {
+              click: e => {
+                e.stopPropagation();
                 console.log('啊啊啊啊啊啊啊啊啊啊啊啊')
                 self.$root.$emit('DEAL_CHOOSE', this)
               },
               ...this.nativeOn
             },
             children: this.children
-        }])
+        }], ...this.colInject)
         }
       },
     },
     mounted() {
-      console.log(this.renderFun.toString())
+      console.log('privideddddddddddddd', this.colInject)
+      console.log(this)
     }
 };
 export default base

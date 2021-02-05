@@ -20,17 +20,15 @@ let base = {
       },
       children: {
           type: Array,
-          default: () => [{
-              name: 'el-col',
-              attrs: {
-                  span: 4
-              },
-              children: []
-          }]
+          default: () => []
       },
       styles: {
           type: Object,
           default: () => {}
+      },
+      rawId: {
+        type: Number,
+        default: 0
       },
     },
     render,
