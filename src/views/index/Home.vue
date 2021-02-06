@@ -55,6 +55,7 @@
                 :current-item="item"
                 :index="index"
                 :active-id="activeId"
+                :containerInject="containerInject"
                 :form-conf="formConf"
                 @activeItem="activeFormItem"
                 @copyItem="drawingItemCopy"
@@ -71,6 +72,7 @@
     <right-panel
       :active-data="activeData"
       :form-conf="formConf"
+      :containerInject="containerInject"
       :show-field="!!drawingList.length"
       @renderAgain="renderAgain"
       @tag-change="tagChange"
@@ -109,7 +111,7 @@ import logo from '@/assets/logo.png'
 import CodeTypeDialog from './CodeTypeDialog'
 import DraggableItem from './DraggableItem'
 import {
-  getDrawingList, saveDrawingList, getIdGlobal, saveIdGlobal, getFormConf
+  getDrawingList, saveDrawingList, getIdGlobal, saveIdGlobal, getFormConf, getContainer, saveContainer
 } from '@/utils/db'
 import loadBeautifier from '@/utils/loadBeautifier'
 import { getDefaultProps } from '../../schema/util'
@@ -122,6 +124,7 @@ const drawingListInDB = getDrawingList()
 console.log('drawingListInDB', drawingListInDB)
 const formConfInDB = getFormConf()
 const idGlobal = getIdGlobal()
+const containerInject = getContainer()
 export default {
   components: {
     draggable,
@@ -158,8 +161,10 @@ export default {
       generateConf: null,
       showFileName: false,
       activeData: drawingDefalut[1],
+      containerInject: containerInject || {},
       saveDrawingListDebounce: debounce(340, saveDrawingList),
       saveIdGlobalDebounce: debounce(340, saveIdGlobal),
+      saveContainerDebounce: debounce(340, saveContainer),
       leftComponents: [
         {
           title: '输入型组件',
@@ -209,6 +214,12 @@ export default {
         if (val.length === 0) this.idGlobal = 100
       },
       deep: true
+    },
+    containerInject: {
+      deep: true,
+      handler(val) {
+        this.saveContainerDebounce(val)
+      }
     },
     idGlobal: {
       handler(val) {
@@ -325,7 +336,6 @@ export default {
       }
     },
     activeFormItem(currentItem) {
-      console.log(this.$root.$options)
       if (this.$root.$options.components[currentItem.name]) {
         const comOptions = getDefaultProps(this.$root.$options.components[currentItem.name].options)
         for(let i in comOptions) {

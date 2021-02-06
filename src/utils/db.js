@@ -2,6 +2,8 @@ const DRAWING_ITEMS = 'drawingItems'
 const DRAWING_ITEMS_VERSION = '1.2'
 const DRAWING_ITEMS_VERSION_KEY = 'DRAWING_ITEMS_VERSION'
 const DRAWING_ID = 'idGlobal'
+const DRAWING_CONTAINER = 'containerInject'
+
 const TREE_NODE_ID = 'treeNodeId'
 const FORM_CONF = 'formConf'
 
@@ -95,6 +97,17 @@ export function getIdGlobal() {
 
 export function saveIdGlobal(id) {
   localStorage.setItem(DRAWING_ID, `${id}`)
+}
+
+export function getContainer() {
+  const str = localStorage.getItem(DRAWING_CONTAINER)
+  if (str) return parseInt(str)
+  return {}
+}
+
+export function saveContainer(id) {
+  console.log(id)
+  localStorage.setItem(DRAWING_CONTAINER, JSON.stringify(id))
 }
 
 export function getTreeNodeId() {

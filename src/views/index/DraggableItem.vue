@@ -44,7 +44,7 @@ const layouts = {
       </el-col>
     )
   },
-  oFormItem(h, currentItem, index, list) {
+  oFormItem(h, currentItem, index, list, containerData) {
     const { activeItem } = this.$listeners
     const config = currentItem.__config__
     let className = this.activeId === config.formId ? 'drawing-item active-from-item' : 'drawing-item'
@@ -127,14 +127,20 @@ export default {
     'index',
     'drawingList',
     'activeId',
-    'formConf'
+    'formConf',
+    'containerInject'
   ],
+  provide() {
+    return {
+      containerInject: this.containerInject
+    }
+  },
   render(h) {
     // 根据布局方式选择不同渲染函数 rol和raw两种
     const layout = layouts[this.currentItem.__config__.layout]
 
     if (layout) {
-      return layout.call(this, h, this.currentItem, this.index, this.drawingList)
+      return layout.call(this, h, this.currentItem, this.index, this.drawingList, this.containerInject)
     }
     return layoutIsNotFound.call(this)
   }

@@ -12,39 +12,40 @@ let base = {
             'label-width': '74px',
             'min-height': '200px'
           },
-          containerInject: {
-            // radioGroup
-            '456389': {
-              radioGroup: '123'
-            },
-            // radio
-            '408157': {
-              radio: '456389'
-            },
-            // radio
-            '853985': {
-              radio: '456389'
-            },
-            // radio
-            '873264': {
-              radio: '456389'
-            },
-            // checkbox
-            '2499': {
-              checkbox: false
-            },
-            // input
-            '431319': {
-              input: ''
-            },
-            // select
-            // '91926': {
-            //   select: ''
-            // }
-          }
+          // containerInject: {
+          //   // radioGroup
+            // '456389': {
+            //   radioGroup: '123'
+            // },
+          //   // radio
+          //   '408157': {
+          //     radio: '456389'
+          //   },
+          //   // radio
+          //   '853985': {
+          //     radio: '456389'
+          //   },
+          //   // radio
+          //   '873264': {
+          //     radio: '456389'
+          //   },
+          //   // checkbox
+          //   '2499': {
+          //     checkbox: false
+          //   },
+          //   // input
+          //   '431319': {
+          //     input: ''
+          //   },
+          //   // select
+          //   // '91926': {
+          //   //   select: ''
+          //   // }
+          // }
         }
     },
     props: {
+      // 以下属性正式环境下皆为 data
       form: {
         type: Object,
         default: () => {}
@@ -54,8 +55,6 @@ let base = {
         default: () => {
           return {
             size: 'small',
-            'label-width': '74px',
-            'min-height': '200px'
           }
         }
       },
@@ -75,6 +74,8 @@ let base = {
         type: Object,
         default: () => {
           return {
+            'label-width': '74px',
+            'min-height': '200px'
           }
         }
       },
@@ -82,6 +83,18 @@ let base = {
         type: Number,
         default: 0
       },
+      computed: {
+        type: Object,
+        default: () => {}
+      },
+      methods: {
+        type: Object,
+        default: () => {}
+      },
+      // containerInject: {
+      //   type: Object,
+      //   default: () => {}
+      // }
     },
     render,
     methods: {
@@ -97,16 +110,22 @@ let base = {
         submit(e) {
           console.log('submit');
           console.log(e)
-        }
+        },
+        ...this.methods
     },
-    provide() {
-      return {
-        containerInject: this.containerInject
+    // provide() {
+    //   return {
+    //     containerInject: this.containerInject
+    //   }
+    // },
+    inject: {
+      containerInject: {
+        default: () => {}
       }
     },
-    // inject: ['ocontainerInject'],
     computed: {
       ...computed,
+      ...this.computed,
       configComponents() {
         return {
           children: this.renderFun([{
@@ -126,6 +145,10 @@ let base = {
               },
               nativeOn: {
                 click: () => {
+                  if (!this.containerInject[this.rawId]) {
+                    console.log('woyou', this.rawId)
+                    this.$set(this.containerInject, this.rawId, {})
+                  }
                   console.log('啊啊啊啊啊啊啊啊啊啊啊啊')
                   this.$root.$emit('DEAL_CHOOSE', this)
                 },

@@ -80,6 +80,11 @@ let base = {
                 click: e => {
                   e.preventDefault()
                   e.stopPropagation()
+                  if (!this.containerInject[this.rawId]) {
+                    this.$set(this.containerInject, this.rawId, {
+                      input: ''
+                    })
+                  }
                   this.$root.$emit('DEAL_CHOOSE', this)
                 },
             },

@@ -86,6 +86,10 @@ export default {
             type: Object,
             default: () => {}
         },
+        containerInject: {
+          type: Object,
+          default: () => {}
+        },
         rootWord: {
             type: String,
             default: 'props'
@@ -97,7 +101,8 @@ export default {
         initialType: {
           type: String,
           default: 'object'
-        }
+        },
+
     },
     render() {
         const modifyItem = this.modifyItem
@@ -214,7 +219,10 @@ export default {
                 name: this.modifyItem[key].value,
                 props: getDefaultProps(comOptions),
               }
-              if (!config.props.rawId) config.props.rawId = getRawId()
+              if (!config.props.rawId) {
+                config.props.rawId = getRawId()
+                if (!this.containerInject[config.props.rawId]) this.containerInject[config.props.rawId] = {}
+              }
               this.$set(this.activeData[key], this.modifyItem[key].key, config)
             } else {
               // 简单属性直接保存

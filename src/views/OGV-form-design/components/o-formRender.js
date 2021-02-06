@@ -12,36 +12,6 @@ let base = {
             'label-width': '74px',
             'min-height': '200px'
           },
-          containerInject: {
-            // radioGroup
-            '456389': {
-              radioGroup: '123'
-            },
-            // radio
-            '408157': {
-              radio: '456389'
-            },
-            // radio
-            '853985': {
-              radio: '456389'
-            },
-            // radio
-            '873264': {
-              radio: '456389'
-            },
-            // checkbox
-            '2499': {
-              checkbox: false
-            },
-            // input
-            '431319': {
-              input: ''
-            },
-            // select
-            // '91926': {
-            //   select: ''
-            // }
-          }
         }
     },
     props: {
@@ -99,13 +69,11 @@ let base = {
           console.log(e)
         }
     },
-    provide() {
-      return {
-        colInject: [3123, 123,12312],
-        containerInject: this.containerInject
+    inject: {
+      containerInject: {
+        default: () => {}
       }
     },
-    // inject: ['ocontainerInject'],
     computed: {
       ...computed,
       configComponents() {
@@ -126,7 +94,14 @@ let base = {
                 ...this.attrs
               },
               nativeOn: {
-                click: () => {
+                click: e => {
+                  e.stopPropagation()
+                  console.log('woyou', this.rawId)
+                  console.log(this.containerInject)
+                  if (!this.containerInject[this.rawId]) {
+                    console.log('woyou', this.rawId)
+                    this.$set(this.containerInject, this.rawId, {})
+                  }
                   console.log('啊啊啊啊啊啊啊啊啊啊啊啊')
                   this.$root.$emit('DEAL_CHOOSE', this)
                 },

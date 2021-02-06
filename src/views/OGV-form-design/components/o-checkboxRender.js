@@ -67,10 +67,6 @@ let base = {
     },
     computed: {
       ...computed,
-      checkValue() {
-        console.log()
-        return this._provided.containerInject[this.rawId].checkbox
-      },
       configComponents() {
         return {
           children: [{
@@ -81,8 +77,13 @@ let base = {
                 click: e => {
                   e.preventDefault()
                   e.stopPropagation()
-                  console.log('啊啊啊啊啊啊啊啊啊啊我是div')
-                  this.containerInject[this.rawId].checkbox = !this.containerInject[this.rawId].checkbox 
+                  if (!this.containerInject[this.rawId]) {
+                    this.$set(this.containerInject, this.rawId, {
+                      checkbox: true
+                    })
+                  } else {
+                    this.containerInject[this.rawId].checkbox = !this.containerInject[this.rawId].checkbox 
+                  }
                   this.$root.$emit('DEAL_CHOOSE', this)
                 },
             },
@@ -91,7 +92,7 @@ let base = {
               attrs: {
                   size: 'small',
                   ...this.attrs,
-                  value: this.containerInject[this.rawId].checkbox
+                  value: this.containerInject[this.rawId] && this.containerInject[this.rawId].checkbox
               },
               style: Object.assign(this.style, this.styles),
               ref: 'oCheckbox',

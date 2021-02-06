@@ -15,6 +15,7 @@
           <div v-if="activeData.name">
             <InfiniteObject
               :activeData="activeData.props"
+              :containerInject="containerInject"
               :rootWord="i"
               v-for="(i, index) in propertiesList"
               :initialType="i === 'children' ? 'array' : 'string'"
@@ -79,7 +80,7 @@ export default {
     // ComponentConfigDetail
     // IconsDialog
   },
-  props: ['showField', 'activeData', 'formConf'],
+  props: ['showField', 'activeData', 'formConf', 'containerInject'],
   mounted() {
     console.log(this.activeData)
   },
