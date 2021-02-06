@@ -22,10 +22,6 @@ let base = {
         type: String,
         default: 'a'
       },
-      value: {
-        type: String,
-        default: ''
-      },
       styles: {
         type: Object,
         default: () => {
@@ -58,6 +54,7 @@ let base = {
             this.$root.$emit('DEAL_CHOOSE', this)
         }
     },
+    inject: ['containerInject'],
     computed: {
       ...computed,
       configComponents() {
@@ -75,16 +72,17 @@ let base = {
             },
             children: [{
               name: 'el-radio-group',
-              attrs: Object.assign({
-                  size: 'small',
-              }, this.attrs),
+              attrs: {
+                size: 'small',
+                ...this.attrs,
+                value: this.containerInject[this.rawId].radioGroup
+              },
               style: Object.assign(this.style, this.styles),
               ref: 'oRadioGroup',
               on: {
                   change: this.change
               },
               props: {
-                value: this.val,
                 rawId: this.rawId
               },
               children: this.children

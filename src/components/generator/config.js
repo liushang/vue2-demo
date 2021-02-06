@@ -51,6 +51,13 @@ export const oComponents = [
       layout: 'oFormItem',
     },
   }, {
+    name: 'oContainer',
+    props: {},
+    __config__: {
+      label: 'container',
+      layout: 'oFormItem',
+    },
+  }, {
     name: 'oDatePicker',
     props: {},
     __config__: {

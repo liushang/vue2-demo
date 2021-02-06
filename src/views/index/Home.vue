@@ -203,6 +203,8 @@ export default {
     },
     drawingList: {
       handler(val) {
+        console.log('保存结构配置数据')
+        console.log(val)
         this.saveDrawingListDebounce(val)
         if (val.length === 0) this.idGlobal = 100
       },
@@ -323,14 +325,15 @@ export default {
       }
     },
     activeFormItem(currentItem) {
-      const comOptions = getDefaultProps(this.$root.$options.components[currentItem.name].options)
-      for(let i in comOptions) {
-        console.log(comOptions[i])
-        if (!currentItem.props[i]) this.$set(currentItem.props, i, comOptions[i])
-        // this.$set(currentItem.props.attrs, i, comOptions[i])
+      console.log(this.$root.$options)
+      if (this.$root.$options.components[currentItem.name]) {
+        const comOptions = getDefaultProps(this.$root.$options.components[currentItem.name].options)
+        for(let i in comOptions) {
+          if (!currentItem.props[i]) this.$set(currentItem.props, i, comOptions[i])
+          // this.$set(currentItem.props.attrs, i, comOptions[i])
+        }
+        if (!currentItem.props.rawId) currentItem.props.rawId = getRawId()
       }
-      if (!currentItem.props.rawId) currentItem.props.rawId = getRawId()
-      console.log('activeFormItem', currentItem)
       // this.$set(currentItem.props.attrs, 'border', '1px solid red')
       this.activeData = currentItem
       // this.activeId = currentItem.__config__.formId

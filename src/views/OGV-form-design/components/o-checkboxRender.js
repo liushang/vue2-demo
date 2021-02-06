@@ -60,8 +60,17 @@ let base = {
             this.$root.$emit('DEAL_CHOOSE', this)
         }
     },
+    inject: {
+      containerInject: {
+        default: () => {}
+      }
+    },
     computed: {
       ...computed,
+      checkValue() {
+        console.log()
+        return this._provided.containerInject[this.rawId].checkbox
+      },
       configComponents() {
         return {
           children: [{
@@ -73,21 +82,23 @@ let base = {
                   e.preventDefault()
                   e.stopPropagation()
                   console.log('啊啊啊啊啊啊啊啊啊啊我是div')
+                  this.containerInject[this.rawId].checkbox = !this.containerInject[this.rawId].checkbox 
                   this.$root.$emit('DEAL_CHOOSE', this)
                 },
             },
             children: [{
               name: 'el-checkbox',
-              attrs: Object.assign({
+              attrs: {
                   size: 'small',
-              }, this.attrs),
+                  ...this.attrs,
+                  value: this.containerInject[this.rawId].checkbox
+              },
               style: Object.assign(this.style, this.styles),
               ref: 'oCheckbox',
               on: {
                   change: this.change
               },
               props: {
-                value: this.val,
                 rawId: this.rawId
               },
               children: this.children
@@ -100,6 +111,7 @@ let base = {
       this.val = this.value || (this.keyword && this.form[this.keyword]) || this.attrs.value || ''
     },
     mounted() {
+      console.log('___provi', this._provided)
     }
 };
 export default base

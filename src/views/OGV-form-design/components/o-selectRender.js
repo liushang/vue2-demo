@@ -3,7 +3,6 @@ import { render, computed } from '../../../schema/api';
 let base = {
     data() {
         return {
-            val: '',
             style: {
               border: '1px solid #409EFF'
             }
@@ -73,6 +72,9 @@ let base = {
     },
     computed: {
       ...computed,
+      val() {
+        return this.containerInject[this.rawId] && this.containerInject[this.rawId].select || ''
+      },
       configComponents() {
         return {
           children: [{
@@ -117,9 +119,7 @@ let base = {
         }
       },
     },
-    created() {
-      this.val = this.value || (this.keyword && this.form[this.keyword]) || this.attrs.value || ''
-    },
+
     mounted() {
     }
 };

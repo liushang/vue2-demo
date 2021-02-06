@@ -56,7 +56,6 @@ let base = {
     computed: {
       ...computed,
       configComponents() {
-        let self = this
         return {
           children: this.renderFun([{
             name: 'el-col',
@@ -73,7 +72,7 @@ let base = {
               click: e => {
                 e.stopPropagation();
                 console.log('啊啊啊啊啊啊啊啊啊啊啊啊')
-                self.$root.$emit('DEAL_CHOOSE', this)
+                this.$root.$emit('DEAL_CHOOSE', this)
               },
               ...this.nativeOn
             },

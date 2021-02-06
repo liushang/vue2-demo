@@ -15,10 +15,32 @@ export function getDrawingList() {
   }
 
   const str = localStorage.getItem(DRAWING_ITEMS)
-  if (str) return propertyStringToFunc(JSON.parse(str))
+  // if (str) return propertyStringToFunc(JSON.parse(str))
+  if (str) return onToFunc(propertyStringToFunc(JSON.parse(str)), 'on')
   return null
 }
-
+export function onToFunc(iarr, on) {
+  console.log('newnewnewnewnewnewe212nwnewne')
+  for(const i of iarr) {
+    if (i.props && (i.props[on])) {
+      for (let y in i.props[on]) {
+        let funStr = i.props[on][y]
+        // 获取函数体
+        let funLast = funStr.slice(funStr.indexOf('{') + 1)
+        let funMiddle = funLast.slice(0, funLast.lastIndexOf('}'))
+        // 获取函数参数
+        let funPre = funStr.slice(funStr.indexOf('(') + 1)
+        let funNamePre = funPre.slice(0, funPre.indexOf(')'))
+        let funNameArr = funNamePre.split(',')
+        i.props[on][y] = new Function(...funNameArr, funMiddle);
+      }
+    }
+    if (i.props && i.props.children) {
+      onToFunc(i.props.children, on)
+    }
+  }
+  return iarr
+}
 export function propertyStringToFunc(str) {
   for(let i of str) {
     if (i.props && (i.props.renderFunStr)) {
@@ -55,7 +77,14 @@ export function stringToFunc(str) {
 }
 
 export function saveDrawingList(list) {
-  localStorage.setItem(DRAWING_ITEMS, JSON.stringify(list))
+  let json = JSON.stringify(list, function(key, value) {
+    if (typeof value === 'function' && key !== 'renderFun') {
+      return value.toString();
+    } else {
+      return value;
+    }
+  });
+  localStorage.setItem(DRAWING_ITEMS, json)
 }
 
 export function getIdGlobal() {

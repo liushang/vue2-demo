@@ -220,28 +220,21 @@ export function getDefaultProps (config) {
             const type = props[i].type;
             if (Array === type || type === Object) {
                 if ('default' in props[i]) {
-                    console.log(props[i].default())
                     propsIns[i] = props[i].default() || {}
                 } else {
                     propsIns[i] = map[type]
                 }
             } else {
-                console.log(type)
-                console.log(typeof type)
-                console.log(props[i])
                 propsIns[i] = 'default' in props[i] ? dealMap[typeof type](props[i].default) : map[type]
                 if (('renderFun' in propsIns)) {
                     propsIns.renderFunStr = dealMap['function'].toString()
                 }
-                console.log(props[i])
             }
         }
     }
-    console.log(propsIns)
     return propsIns
 }
 
 export function getRawId() {
-    console.log(Math.random)
     return parseInt(Math.random() * 1000000)
 }

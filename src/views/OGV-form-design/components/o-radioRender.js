@@ -22,10 +22,10 @@ let base = {
         type: String,
         default: 'a'
       },
-      value: {
-        type: String,
-        default: ''
-      },
+      // value: {
+      //   type: String,
+      //   default: ''
+      // },
       attrs: {
         type: Object,
         default: () => {
@@ -79,11 +79,17 @@ let base = {
         click(event) {
           // this.configComponents.children[0].props.value = event
           // this.form[this.keyword] = event
+          console.log('上山打老虎')
           this.form[this.keyword] = this.val = event
           console.log(this.form)
           this.$emit('changeVal', event)
           this.$root.$emit('DEAL_CHOOSE', this)
         }
+    },
+    inject: {
+      containerInject: {
+        default: () => {}
+      }
     },
     computed: {
       ...computed,
@@ -116,15 +122,18 @@ let base = {
               },
               nativeOn: {
                 click: () => {
-                  console.log('啊啊啊啊啊啊啊啊啊啊啊啊option')
-                  this.$parent.$parent.$parent.value = this.val
-                  console.log(this.$parent.$parent.$parent)
+                  console.log('啊啊啊啊啊啊啊啊啊啊啊啊option', this.val)
+                  // this.$set(this.$parent.$parent.attrs, 'value', this.val)
+                  // this.$parent.$parent.attrs.value = this.val
+                  console.log(this.$parent.$parent)
+                  this.containerInject[this.containerInject[this.rawId].radio].radioGroup = this.val
+                  console.log(this.$parent.$parent.attrs.value)
                   this.$emit('changeVal', this.val)
                   this.$root.$emit('DEAL_CHOOSE', this)
                 },
               },
               props: {
-                value: this.val,
+                // value: this.val,
                 rawId: this.rawId
               },
             }]
@@ -133,7 +142,7 @@ let base = {
       },
     },
     created() {
-      this.val = this.value || (this.keyword && this.form[this.keyword]) || this.attrs.value || ''
+      this.val = this.attrs.label || (this.keyword && this.form[this.keyword]) || this.attrs.value || ''
     },
     mounted() {
     }

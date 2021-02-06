@@ -25,6 +25,7 @@ import oOptionRender from './views/OGV-form-design/components/o-optionRender'
 import oCheckboxRender from './views/OGV-form-design/components/o-checkboxRender'
 import oRadioGroupRender from './views/OGV-form-design/components/o-radioGroupRender'
 import oRadioRender from './views/OGV-form-design/components/o-radioRender'
+import oContainerRender from './views/OGV-form-design/components/o-containerRender'
 
 import 'element-ui/lib/theme-chalk/index.css';
 import Tinymce from '@/components/tinymce/index.vue'
@@ -52,7 +53,7 @@ Vue.component('oOption', oOptionRender)
 Vue.component('oCheckbox', oCheckboxRender)
 Vue.component('oRadioGroup', oRadioGroupRender)
 Vue.component('oRadio', oRadioRender)
-
+Vue.component('oContainer', oContainerRender)
 
 
 Vue.config.productionTip = false

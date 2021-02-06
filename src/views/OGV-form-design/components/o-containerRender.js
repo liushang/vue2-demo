@@ -101,7 +101,6 @@ let base = {
     },
     provide() {
       return {
-        colInject: [3123, 123,12312],
         containerInject: this.containerInject
       }
     },
@@ -111,8 +110,8 @@ let base = {
       configComponents() {
         return {
           children: this.renderFun([{
-              name: 'el-form',
-              ref: 'oForm',
+              name: 'el-row',
+              ref: 'oContainer',
               on: {
                   click: e => {
                     e.preventDefault()

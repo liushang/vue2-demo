@@ -3,7 +3,6 @@ import { render, computed } from '../../../schema/api';
 let base = {
     data() {
         return {
-            val: '',
             style: {
               border: '1px solid #409EFF'
             }
@@ -21,10 +20,6 @@ let base = {
       keyword: {
         type: String,
         default: 'a'
-      },
-      value: {
-        type: String,
-        default: ''
       },
       styles: {
         type: Object,
@@ -60,13 +55,22 @@ let base = {
           // this.configComponents.children[0].props.value = event
           // this.form[this.keyword] = event
           console.log('oInput')
-          this.form[this.keyword] = this.val = event
+          // this.form[this.keyword] = this.val = event
+          this.containerInject[this.rawId].input = event
           console.log(this.form)
           this.$root.$emit('DEAL_CHOOSE', this)
         }
     },
+    inject: {
+      containerInject: {
+        default: () => {}
+      }
+    },
     computed: {
       ...computed,
+      val() {
+        return this.containerInject[this.rawId] && this.containerInject[this.rawId].input || ''
+      },
       configComponents() {
         return {
           children: [{
@@ -76,7 +80,6 @@ let base = {
                 click: e => {
                   e.preventDefault()
                   e.stopPropagation()
-                  console.log('啊啊啊啊啊啊啊啊啊啊我是div')
                   this.$root.$emit('DEAL_CHOOSE', this)
                 },
             },
@@ -102,9 +105,7 @@ let base = {
         }
       },
     },
-    created() {
-      this.val = this.value || (this.keyword && this.form[this.keyword]) || this.attrs.value || ''
-    },
+    created() {},
     mounted() {
     }
 };
