@@ -18,7 +18,7 @@ export function getDrawingList() {
 
   const str = localStorage.getItem(DRAWING_ITEMS)
   // if (str) return propertyStringToFunc(JSON.parse(str))
-  if (str) return onToFunc(propertyStringToFunc(JSON.parse(str)), 'on')
+  if (str) return onToFunc(onToFunc(propertyStringToFunc(JSON.parse(str)), 'on'), 'methods')
   return null
 }
 export function onToFunc(iarr, on) {
@@ -66,7 +66,7 @@ export function propertyStringToFunc(str) {
   return str
 }
 
-export function stringToFunc(str) {
+export function stringToFunc(str, self) {
   let funStr = str
   // 获取函数体
   let funLast = funStr.slice(funStr.indexOf('{') + 1)
@@ -75,6 +75,7 @@ export function stringToFunc(str) {
   let funPre = funStr.slice(funStr.indexOf('(') + 1)
   let funNamePre = funPre.slice(0, funPre.indexOf(')'))
   let funNameArr = funNamePre.split(',')
+  if (self) return new Function(self, ...funNameArr, funMiddle);
   return new Function(...funNameArr, funMiddle);
 }
 

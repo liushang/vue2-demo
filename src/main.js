@@ -3,6 +3,8 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import axios from './utils/axios-v3';
+
 import * as antd from '@antv/g2';
 import OGVSchema from './schema/index';
 import VueCodemirror from 'vue-codemirror'
@@ -26,6 +28,9 @@ import oCheckboxRender from './views/OGV-form-design/components/o-checkboxRender
 import oRadioGroupRender from './views/OGV-form-design/components/o-radioGroupRender'
 import oRadioRender from './views/OGV-form-design/components/o-radioRender'
 import oContainerRender from './views/OGV-form-design/components/o-containerRender'
+import oTableRender from './views/OGV-form-design/components/o-tableRender'
+import oTableColumnRender from './views/OGV-form-design/components/o-tableColumnRender'
+import oPaginationRender from './views/OGV-form-design/components/o-paginationRender'
 
 import 'element-ui/lib/theme-chalk/index.css';
 import Tinymce from '@/components/tinymce/index.vue'
@@ -33,6 +38,8 @@ Vue.use(VueCodemirror, /* {
   options: { theme: 'base16-dark', ... },
   events: ['scroll', ...]
 } */)
+Vue.prototype.$axios = axios;
+window.$axios = axios;
 Vue.component('tinymce', Tinymce)
 Vue.use(ElementUI);
 Vue.use(OGVSchema);
@@ -54,6 +61,9 @@ Vue.component('oCheckbox', oCheckboxRender)
 Vue.component('oRadioGroup', oRadioGroupRender)
 Vue.component('oRadio', oRadioRender)
 Vue.component('oContainer', oContainerRender)
+Vue.component('oTable', oTableRender)
+Vue.component('oTableColumn', oTableColumnRender)
+Vue.component('oPagination', oPaginationRender)
 
 
 Vue.config.productionTip = false

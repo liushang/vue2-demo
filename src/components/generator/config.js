@@ -107,6 +107,27 @@ export const oComponents = [
       layout: 'oFormItem',
     },
   }, {
+    name: 'oTable',
+    props: {},
+    __config__: {
+      label: 'el-table',
+      layout: 'oFormItem',
+    },
+  }, {
+    name: 'oTableColumn',
+    props: {},
+    __config__: {
+      label: 'el-tableColumn',
+      layout: 'oFormItem',
+    },
+  }, {
+    name: 'oPagination',
+    props: {},
+    __config__: {
+      label: 'el-pagination',
+      layout: 'oFormItem',
+    },
+  }, {
     name: 'oFormItem',
     props: {},
     __config__: {

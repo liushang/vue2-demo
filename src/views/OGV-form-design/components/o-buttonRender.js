@@ -1,5 +1,8 @@
 // import { analysisRenderConfig, analysisDataRender } from '../../../schema/util';
 import { render, computed } from '../../../schema/api';
+// import {
+//     stringToFunc
+//   } from '@/utils/db'
 let base = {
     data() {
         return {
@@ -38,7 +41,17 @@ let base = {
     },
     computed: {
         ...computed,
-configComponents() {
+        configComponents() {
+            console.log('configComponents')
+            for (let i in this.on) {
+                console.log(this)
+                let func = this.on[i]
+                this.on[i] = (e) => {
+                    console.log('开始执行ooooo')
+                    return func(e, this)
+                }
+                console.log(this.on)
+            }
             return {
                 children: [{
                     // 为了展示边框选中态特意加的

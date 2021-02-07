@@ -227,7 +227,7 @@ export default {
             } else {
               // 简单属性直接保存
               let value = this.modifyItem[key].value
-              if (key === 'on' || key === 'nativeOn') {
+              if (key === 'on' || key === 'nativeOn' || key === 'methods') {
                 value = stringToFunc(this.modifyItem[key].value)
               }
               this.$set(this.activeData[key], this.modifyItem[key].key, value )

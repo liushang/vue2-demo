@@ -21,7 +21,7 @@
               :initialType="i === 'children' ? 'array' : 'string'"
               :key="index"
               @changeComponentPanel="changeComponentPanel"
-              :initialTypeShow="['renderFun', 'rawId', 'on', 'nativeOn'].includes(i) ? 'text' : 'input'"
+              :initialTypeShow="['renderFun', 'rawId', 'on', 'nativeOn', 'methods'].includes(i) ? 'text' : 'input'"
               ></InfiniteObject>
           </div>
           <!-- <codemirror v-model="activeData.props.renderFun" :options="cmOptions" ref="cmEditor"/> -->
@@ -154,7 +154,7 @@ export default {
       console.log(data, property, subProperty)
       const [ data, property, subProperty ] = this.tempCodeArr
       if (data[property][subProperty]) {
-        data[property][subProperty] = stringToFunc(code)
+        data[property][subProperty] = code
       } else {
         data[property] = stringToFunc(code)
       }
@@ -170,7 +170,7 @@ export default {
     // 向上传递改变组件面板内容
     changeComponentPanel(data, property, subProperty) {
       console.log(property, subProperty)
-      if (property === 'renderFun' || property === 'on' || property === 'nativeOn') {
+      if (property === 'renderFun' || property === 'on' || property === 'nativeOn' || property === 'methods') {
         // 函数编辑窗
         this.tempCodeArr = [data, property, subProperty]
         this.showFunctionDialog = true
@@ -271,9 +271,6 @@ export default {
       if (Array.isArray(val)) {
         return val.join(',')
       }
-      // if (['string', 'number'].indexOf(typeof val) > -1) {
-      //   return val
-      // }
       if (typeof val === 'boolean') {
         return `${val}`
       }
@@ -365,7 +362,7 @@ export default {
 </style>
 <style lang="less" scoped>
 .right-board {
-  width: 550px;
+  width: 450px;
   position: absolute;
   right: 0;
   top: 0;

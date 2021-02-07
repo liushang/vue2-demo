@@ -12,36 +12,7 @@ let base = {
             'label-width': '74px',
             'min-height': '200px'
           },
-          // containerInject: {
-          //   // radioGroup
-            // '456389': {
-            //   radioGroup: '123'
-            // },
-          //   // radio
-          //   '408157': {
-          //     radio: '456389'
-          //   },
-          //   // radio
-          //   '853985': {
-          //     radio: '456389'
-          //   },
-          //   // radio
-          //   '873264': {
-          //     radio: '456389'
-          //   },
-          //   // checkbox
-          //   '2499': {
-          //     checkbox: false
-          //   },
-          //   // input
-          //   '431319': {
-          //     input: ''
-          //   },
-          //   // select
-          //   // '91926': {
-          //   //   select: ''
-          //   // }
-          // }
+          basicData: {}
         }
     },
     props: {
@@ -57,6 +28,10 @@ let base = {
             size: 'small',
           }
         }
+      },
+      on: {
+        type: Object,
+        default: () => {}
       },
       nativeOn: {
         type: Object,
@@ -74,8 +49,7 @@ let base = {
         type: Object,
         default: () => {
           return {
-            'label-width': '74px',
-            'min-height': '200px'
+            'min-height': '700px'
           }
         }
       },
@@ -91,10 +65,6 @@ let base = {
         type: Object,
         default: () => {}
       },
-      // containerInject: {
-      //   type: Object,
-      //   default: () => {}
-      // }
     },
     render,
     methods: {
@@ -108,16 +78,14 @@ let base = {
           this.value = event
         },
         submit(e) {
-          console.log('submit');
-          console.log(e)
         },
         ...this.methods
     },
-    // provide() {
-    //   return {
-    //     containerInject: this.containerInject
-    //   }
-    // },
+    provide() {
+      return {
+        rootId: this.rawId
+      }
+    },
     inject: {
       containerInject: {
         default: () => {}
@@ -127,15 +95,21 @@ let base = {
       ...computed,
       ...this.computed,
       configComponents() {
+        for (let i in this.on) {
+          let func = this.on[i]
+          this.on[i] = (e) => {
+              return func(e, this)
+          }
+        }
         return {
           children: this.renderFun([{
               name: 'el-row',
               ref: 'oContainer',
               on: {
-                  click: e => {
-                    e.preventDefault()
-                    e.stopPropagation()
-                    this.$root.$emit('DEAL_CHOOSE', this)
+                click: e => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  this.$root.$emit('DEAL_CHOOSE', this)
                 },
                 ...this.on
               },
@@ -146,10 +120,11 @@ let base = {
               nativeOn: {
                 click: () => {
                   if (!this.containerInject[this.rawId]) {
-                    console.log('woyou', this.rawId)
                     this.$set(this.containerInject, this.rawId, {})
                   }
-                  console.log('啊啊啊啊啊啊啊啊啊啊啊啊')
+                  if (!this.containerInject[this.rawId].methods) {
+                    this.$set(this.containerInject[this.rawId], 'methods', this.methods)
+                  }
                   this.$root.$emit('DEAL_CHOOSE', this)
                 },
                 ...this.nativeOn
@@ -164,6 +139,8 @@ let base = {
         }
       },
     },
-    mounted() {}
+    mounted() {
+      this.on['mounted'](this)
+    }
 };
 export default base

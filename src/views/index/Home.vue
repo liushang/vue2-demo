@@ -512,7 +512,7 @@ export default {
 .center-board {
   height: 100vh;
   width: auto;
-  margin: 0 550px 0 200px;
+  margin: 0 450px 0 200px;
   box-sizing: border-box;
 }
 .empty-info{
