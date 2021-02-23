@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
-import HelloWorld1 from '../modules/moduleone/test.vue'
-import HelloWorld2 from '../modules/moduletwo/test.vue'
+// import HelloWorld1 from '../modules/moduleone/test.vue'
+// import HelloWorld2 from '../modules/moduletwo/test.vue'
 
 
 
