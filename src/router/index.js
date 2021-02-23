@@ -13,7 +13,7 @@ export default new Router({
     {
       path: '/',
       name: 'HelloWorld',
-      component: HelloWorld2
+      // component: HelloWorld2
     }
   ]
 })
